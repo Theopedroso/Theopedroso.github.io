@@ -23,7 +23,7 @@ achar rápido o que precisa.
 ```bash
 cd backend
 npm install
-cp .env.example .env   # ajuste DATABASE_URL para o seu Postgres local
+cp .env.example .env   # ajuste DATABASE_URL para o seu Postgres local e defina JWT_SECRET
 npx prisma migrate dev # cria as tabelas
 npm run seed            # popula as categorias
 npm run dev              # sobe a API em http://localhost:3001
@@ -65,6 +65,24 @@ python3 -m http.server 8080
 Abra `http://localhost:8080`. Por padrão `js/config.js` aponta para
 `http://localhost:3001` (o backend local).
 
+### 4. Área do lojista
+
+`owner.html` permite que o dono de uma empresa crie conta, reivindique o
+anúncio (busca por nome) e edite descrição, horário, telefone, site e
+endereço do próprio anúncio. Fluxo:
+
+- `POST /api/auth/signup` / `POST /api/auth/login` — retornam um JWT
+- `POST /api/businesses/:id/claim` (autenticado) — reivindica um anúncio
+  ainda não reivindicado
+- `GET /api/businesses/mine` (autenticado) — lista os anúncios do dono
+  logado
+- `PATCH /api/businesses/:id` (autenticado, só o dono) — atualiza
+  `description`, `hours`, `phone`, `website`, `address`, `neighborhood`
+
+O campo `featured` (destaque pago) ainda não tem endpoint — hoje só é
+ativável manualmente no banco. Fica pra quando entrar a integração de
+pagamento.
+
 ## Deploy
 
 - **Frontend**: já é publicado automaticamente pelo GitHub Pages a partir da
@@ -75,10 +93,8 @@ Abra `http://localhost:8080`. Por padrão `js/config.js` aponta para
 - Depois do deploy, atualize `API_BASE_URL` em `js/config.js` para a URL
   pública da API e faça commit.
 
-## Próximos passos (fora do MVP atual)
+## Próximos passos (fora do escopo atual)
 
-- Cadastro/login de donos de empresa e fluxo de "reivindicar anúncio"
-  (tabela `Owner` já existe no schema, faltam os endpoints de auth)
 - Plano pago "destaque" (campo `featured` já existe no schema) + integração
   de pagamento (ex: Mercado Pago) — é o caminho de monetização
 - Enriquecimento via Google Places API (fotos, avaliações, horário) para

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Área do Lojista — Guia Tatuí</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Área do Lojista</h1>
+    <p>Reivindique o anúncio da sua empresa e mantenha as informações atualizadas</p>
+  </header>
+
+  <main>
+    <section id="auth-section">
+      <div class="auth-tabs">
+        <button type="button" id="tab-login" class="tab-btn active">Entrar</button>
+        <button type="button" id="tab-signup" class="tab-btn">Criar conta</button>
+      </div>
+
+      <form id="login-form" class="auth-form">
+        <input type="email" id="login-email" placeholder="Email" required />
+        <input type="password" id="login-password" placeholder="Senha" required />
+        <button type="submit">Entrar</button>
+      </form>
+
+      <form id="signup-form" class="auth-form hidden">
+        <input type="email" id="signup-email" placeholder="Email" required />
+        <input type="password" id="signup-password" placeholder="Senha (mínimo 8 caracteres)" minlength="8" required />
+        <button type="submit">Criar conta</button>
+      </form>
+
+      <p id="auth-message"></p>
+    </section>
+
+    <section id="dashboard-section" class="hidden">
+      <div class="dashboard-header">
+        <span id="account-email"></span>
+        <button type="button" id="logout-btn">Sair</button>
+      </div>
+
+      <h2>Minhas empresas</h2>
+      <div id="my-businesses"></div>
+
+      <h2>Reivindicar uma empresa</h2>
+      <div class="filters">
+        <input type="text" id="claim-search-input" placeholder="Buscar empresa pelo nome..." />
+      </div>
+      <div id="claim-results"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p><a href="index.html">&larr; Voltar para o diretório</a></p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/owner.js"></script>
+</body>
+</html>

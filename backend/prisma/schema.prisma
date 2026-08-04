@@ -36,6 +36,9 @@ model Business {
   city         String
   state        String
   phone        String?
+  description  String?
+  hours        String?
+  website      String?
   source       String   @default("cnpj_rf")
   claimed      Boolean  @default(false)
   featured     Boolean  @default(false)
