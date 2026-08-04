@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id         Int        @id @default(autoincrement())
+  slug       String     @unique
+  name       String
+  businesses Business[]
+}
+
+model Owner {
+  id           Int        @id @default(autoincrement())
+  email        String     @unique
+  passwordHash String
+  createdAt    DateTime   @default(now())
+  businesses   Business[]
+}
+
+model Business {
+  id           Int      @id @default(autoincrement())
+  cnpj         String   @unique
+  name         String
+  categoryId   Int
+  category     Category @relation(fields: [categoryId], references: [id])
+  address      String?
+  neighborhood String?
+  city         String
+  state        String
+  phone        String?
+  source       String   @default("cnpj_rf")
+  claimed      Boolean  @default(false)
+  featured     Boolean  @default(false)
+  ownerId      Int?
+  owner        Owner?   @relation(fields: [ownerId], references: [id])
+  createdAt    DateTime @default(now())
+
+  @@index([categoryId])
+  @@index([city])
+}
