@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Leads — Empresas sem site</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Leads: empresas sem site</h1>
+    <p>Prospecção para envio de propostas de criação de site</p>
+  </header>
+
+  <main>
+    <section id="key-section">
+      <p>Informe a chave de acesso (ADMIN_API_KEY do backend) pra ver os leads.</p>
+      <form id="key-form" class="auth-form">
+        <input type="password" id="key-input" placeholder="Chave de acesso" required />
+        <button type="submit">Entrar</button>
+      </form>
+      <p id="key-message"></p>
+    </section>
+
+    <section id="leads-section" class="hidden">
+      <div class="filters">
+        <input type="text" id="search-input" placeholder="Buscar por nome..." />
+        <select id="category-select">
+          <option value="">Todas as categorias</option>
+        </select>
+        <select id="contacted-select">
+          <option value="">Contatado: todos</option>
+          <option value="false">Ainda não contatado</option>
+          <option value="true">Já contatado</option>
+        </select>
+        <button type="button" id="export-btn">Exportar CSV</button>
+        <button type="button" id="logout-btn">Sair</button>
+      </div>
+
+      <div class="results-header">
+        <span id="results-count"></span>
+      </div>
+
+      <p id="status-message"></p>
+      <div id="leads-list"></div>
+
+      <div class="filters" id="pagination">
+        <button type="button" id="prev-btn">&larr; Anterior</button>
+        <span id="page-info"></span>
+        <button type="button" id="next-btn">Próxima &rarr;</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><a href="index.html">&larr; Voltar para o diretório</a></p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/leads.js"></script>
+</body>
+</html>

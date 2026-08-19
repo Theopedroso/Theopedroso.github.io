@@ -83,6 +83,35 @@ O campo `featured` (destaque pago) ainda não tem endpoint — hoje só é
 ativável manualmente no banco. Fica pra quando entrar a integração de
 pagamento.
 
+### 5. Leads: empresas sem site (prospecção)
+
+Como o diretório já importa todas as empresas ativas da região (via CNPJ da
+Receita Federal) e tem um campo `website`, dá pra usar essa mesma base pra
+achar quem ainda não tem site e mandar proposta.
+
+Defina `ADMIN_API_KEY` no `.env` do backend (é uma chave só sua, não é login
+de usuário — gere com `openssl rand -hex 32`). Duas formas de consultar:
+
+- **Página `leads.html`**: acesse diretamente (não tem link na home, é uso
+  pessoal), informe a `ADMIN_API_KEY` e veja a lista de empresas sem site,
+  com filtro por categoria/nome/status de contato, campo de notas, checkbox
+  "já contatado" e botão pra exportar tudo em CSV.
+- **Script de linha de comando**, pra gerar um CSV direto do banco:
+
+  ```bash
+  cd backend
+  LEADS_CATEGORY=restaurantes LEADS_CITY=TATUI LEADS_OUT=leads.csv npm run leads
+  ```
+
+  Todas as variáveis são opcionais (sem elas, exporta todas as empresas sem
+  site de qualquer categoria/cidade). O CSV traz nome, categoria, telefone,
+  endereço e CNPJ — pronto pra importar numa planilha ou disparo de
+  mensagens.
+
+Endpoints usados por trás (todos exigem o header `x-admin-key`):
+`GET /api/leads` (filtros `category`, `city`, `q`, `contacted`, `page`) e
+`PATCH /api/leads/:id` (atualiza `contacted` e `notes`).
+
 ## Deploy
 
 - **Frontend**: já é publicado automaticamente pelo GitHub Pages a partir da

@@ -8,6 +8,7 @@
     "start": "node src/index.js",
     "seed": "node scripts/seed-categories.js",
     "import": "node scripts/import-cnpj.js",
+    "leads": "node scripts/export-leads.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
