@@ -246,3 +246,32 @@ footer a {
   background: var(--muted);
   cursor: default;
 }
+
+.card label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.6rem;
+}
+
+.card label:has(.contacted-checkbox) {
+  flex-direction: row;
+  align-items: center;
+}
+
+.card .notes-input {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  min-height: 50px;
+  resize: vertical;
+}
+
+#pagination {
+  justify-content: center;
+  align-items: center;
+}

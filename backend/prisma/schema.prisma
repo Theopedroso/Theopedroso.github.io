@@ -45,6 +45,9 @@ model Business {
   ownerId      Int?
   owner        Owner?   @relation(fields: [ownerId], references: [id])
   createdAt    DateTime @default(now())
+  contacted    Boolean  @default(false)
+  contactedAt  DateTime?
+  notes        String?
 
   @@index([categoryId])
   @@index([city])
