@@ -124,10 +124,19 @@ Endpoints usados por trás (todos exigem o header `x-admin-key`):
 
 ## Outras ferramentas neste repositório
 
-- **`whatsapp-financas-bot/`**: bot gratuito de WhatsApp (sem relação com o
-  diretório de empresas) para controle pessoal de salário, gastos, metas de
-  economia e contas a pagar por mensagem de texto, ao estilo do "Pierre
-  Finanças". Veja o README dentro da pasta para instruções de uso.
+- **`financas/`** (recomendado): app pessoal de finanças que roda direto no
+  navegador, publicado junto com o resto do site pelo GitHub Pages em
+  `/financas/`. Controla salário, gastos por categoria (com gráfico),
+  metas de economia e contas a pagar, com lembretes locais. Não tem link na
+  home (é uso pessoal) — acesse o endereço diretamente. Não depende de
+  servidor nem de processo rodando: os dados ficam salvos só no navegador
+  (`localStorage`), com opção de exportar/importar backup em JSON.
+- **`whatsapp-financas-bot/`**: versão alternativa do mesmo tipo de
+  ferramenta só que via chat de WhatsApp, ao estilo do "Pierre Finanças".
+  Exige um processo Node rodando o tempo todo (PC sempre ligado, um
+  servidor ou um Raspberry Pi) — por isso o app em `financas/` é a opção
+  recomendada para quem não quer manter nada ligado. Veja o README dentro
+  da pasta para instruções de uso.
 
 ## Próximos passos (fora do escopo atual)
 

@@ -13,6 +13,12 @@ const { startReminders } = require('./reminders');
 
 const AUTH_DIR = process.env.FINANCAS_AUTH_DIR || path.join(__dirname, '..', 'data', 'auth');
 
+// Em servidor remoto (sem tela pra escanear QR code) defina FINANCAS_PHONE_NUMBER
+// com o número (DDI+DDD+número, só dígitos, ex: 5511999999999) e o bot mostra um
+// código de 8 dígitos pra digitar no WhatsApp: Aparelhos conectados > Conectar
+// com número de telefone.
+const PAIRING_PHONE_NUMBER = process.env.FINANCAS_PHONE_NUMBER?.replace(/\D/g, '') || null;
+
 async function start() {
   const { state, saveCreds } = await useMultiFileAuthState(AUTH_DIR);
   const { version } = await fetchLatestBaileysVersion();
@@ -21,14 +27,26 @@ async function start() {
     version,
     auth: state,
     logger: pino({ level: 'silent' }),
+    printQRInTerminal: false,
   });
 
   sock.ev.on('creds.update', saveCreds);
 
+  if (PAIRING_PHONE_NUMBER && !sock.authState.creds.registered) {
+    try {
+      const code = await sock.requestPairingCode(PAIRING_PHONE_NUMBER);
+      console.log(
+        `\nNo WhatsApp: Aparelhos conectados > Conectar com número de telefone > digite o código: ${code}\n`
+      );
+    } catch (err) {
+      console.error('Falha ao gerar código de pareamento:', err);
+    }
+  }
+
   sock.ev.on('connection.update', (update) => {
     const { connection, lastDisconnect, qr } = update;
 
-    if (qr) {
+    if (qr && !PAIRING_PHONE_NUMBER) {
       console.log('\nEscaneie o QR code no WhatsApp: Aparelhos conectados > Conectar um aparelho\n');
       qrcode.generate(qr, { small: true });
     }

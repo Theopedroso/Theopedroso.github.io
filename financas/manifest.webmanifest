@@ -1,0 +1,13 @@
+{
+  "name": "Minhas Finanças",
+  "short_name": "Finanças",
+  "description": "Controle pessoal de salário, gastos, metas e contas a pagar.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f9f9f7",
+  "theme_color": "#2a78d6",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
