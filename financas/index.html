@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Minhas Finanças</title>
 <meta name="description" content="Controle pessoal de salário, gastos, metas e contas a pagar — 100% no seu navegador, sem servidor.">
 <meta name="theme-color" content="#2a78d6">
@@ -14,123 +14,192 @@
 <body>
 <div class="app" id="app">
 
-  <header class="topbar">
-    <h1>💰 Minhas Finanças</h1>
-    <p class="topbar-sub">Seus dados ficam só neste navegador — nada é enviado pra nenhum servidor.</p>
+  <header class="hero">
+    <div class="hero-top">
+      <span class="hero-brand">💰 Minhas Finanças</span>
+      <button type="button" id="theme-toggle" class="icon-btn" aria-label="Alternar tema claro/escuro">🌙</button>
+    </div>
+
+    <nav class="month-nav" aria-label="Navegação de mês">
+      <button type="button" id="prev-month" aria-label="Mês anterior">‹</button>
+      <span id="month-label" class="month-label"></span>
+      <button type="button" id="next-month" aria-label="Próximo mês">›</button>
+    </nav>
+
+    <div class="hero-balance">
+      <span class="hero-balance-label">Saldo do mês</span>
+      <span class="hero-balance-value" id="hero-balance">R$ 0,00</span>
+      <span class="hero-delta" id="hero-delta" hidden></span>
+    </div>
+
+    <div class="hero-mini-stats">
+      <div class="hero-mini-stat">
+        <span class="dot income-dot"></span>
+        <span class="hero-mini-label">Receitas</span>
+        <span class="hero-mini-value" id="stat-income">R$ 0,00</span>
+      </div>
+      <div class="hero-mini-stat">
+        <span class="dot expense-dot"></span>
+        <span class="hero-mini-label">Despesas</span>
+        <span class="hero-mini-value" id="stat-expense">R$ 0,00</span>
+      </div>
+    </div>
   </header>
 
-  <nav class="month-nav" aria-label="Navegação de mês">
-    <button type="button" id="prev-month" aria-label="Mês anterior">‹</button>
-    <span id="month-label" class="month-label"></span>
-    <button type="button" id="next-month" aria-label="Próximo mês">›</button>
+  <main class="views">
+
+    <section class="view is-active" data-view="resumo" aria-labelledby="tab-resumo">
+      <div class="card" id="chart-card" hidden>
+        <h2>Gastos por categoria</h2>
+        <div class="donut-wrap">
+          <div class="donut" id="donut" role="img" aria-label=""></div>
+          <div class="donut-hole">
+            <span class="donut-value" id="donut-total">R$ 0,00</span>
+            <span class="donut-caption">gasto no mês</span>
+          </div>
+        </div>
+        <ul class="cat-legend" id="category-legend"></ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header-row">
+          <h2>Últimas transações</h2>
+          <button type="button" class="link-btn" data-action="go-extrato">ver tudo</button>
+        </div>
+        <ul class="transaction-list" id="preview-list"></ul>
+        <p class="empty-hint" id="preview-empty">Nenhuma transação neste mês ainda. Toque no + pra adicionar.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header-row">
+          <h2>Orçamento por categoria</h2>
+          <span class="hint-tag">opcional</span>
+        </div>
+        <ul class="budget-list" id="budget-list"></ul>
+      </div>
+
+      <div class="card">
+        <h2>Seus dados</h2>
+        <p class="empty-hint" style="margin-bottom:12px">Tudo fica salvo só neste navegador. Faça backup de vez em quando pra não perder nada.</p>
+        <div class="backup-row">
+          <button type="button" class="btn-secondary" id="export-btn">Exportar backup</button>
+          <label class="btn-secondary file-label">
+            Importar backup
+            <input type="file" id="import-input" accept="application/json" hidden>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="extrato" aria-labelledby="tab-extrato">
+      <div class="card">
+        <h2>Extrato do mês</h2>
+        <div class="filters-row">
+          <input type="search" id="tx-search" placeholder="Buscar por descrição ou categoria…" class="search-input">
+          <select id="tx-filter-type" class="filter-select">
+            <option value="all">Tudo</option>
+            <option value="income">Receitas</option>
+            <option value="expense">Gastos</option>
+          </select>
+        </div>
+        <div id="transaction-groups"></div>
+        <p class="empty-hint" id="transaction-empty">Nenhuma transação encontrada.</p>
+      </div>
+    </section>
+
+    <section class="view" data-view="metas" aria-labelledby="tab-metas">
+      <div class="card">
+        <h2>Metas de economia</h2>
+        <ul class="goals-list" id="goals-list"></ul>
+        <p class="empty-hint" id="goals-empty">Nenhuma meta cadastrada ainda.</p>
+        <form id="goal-form" class="inline-form">
+          <label class="field">
+            <span>Nome da meta</span>
+            <input type="text" id="goal-name" placeholder="Ex: Viagem" required>
+          </label>
+          <label class="field">
+            <span>Valor alvo (R$)</span>
+            <input type="text" inputmode="decimal" id="goal-target" placeholder="2000,00" required>
+          </label>
+          <button type="submit" class="btn-primary">Criar meta</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="view" data-view="contas" aria-labelledby="tab-contas">
+      <div class="card">
+        <h2>Contas fixas</h2>
+        <ul class="bills-list" id="bills-list"></ul>
+        <p class="empty-hint" id="bills-empty">Nenhuma conta cadastrada ainda.</p>
+        <form id="bill-form" class="inline-form">
+          <label class="field">
+            <span>Nome da conta</span>
+            <input type="text" id="bill-name" placeholder="Ex: Luz" required>
+          </label>
+          <label class="field">
+            <span>Valor (R$)</span>
+            <input type="text" inputmode="decimal" id="bill-amount" placeholder="150,00" required>
+          </label>
+          <label class="field">
+            <span>Dia do vencimento</span>
+            <input type="number" id="bill-due-day" min="1" max="31" placeholder="10" required>
+          </label>
+          <button type="submit" class="btn-primary">Adicionar conta</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <button type="button" id="fab-add" class="fab" aria-label="Adicionar transação">+</button>
+
+  <nav class="tabbar" aria-label="Navegação principal">
+    <button type="button" class="tab is-active" data-view="resumo" id="tab-resumo"><span class="tab-icon">🏠</span><span>Resumo</span></button>
+    <button type="button" class="tab" data-view="extrato" id="tab-extrato"><span class="tab-icon">📜</span><span>Extrato</span></button>
+    <button type="button" class="tab" data-view="metas" id="tab-metas"><span class="tab-icon">🎯</span><span>Metas</span></button>
+    <button type="button" class="tab" data-view="contas" id="tab-contas"><span class="tab-icon">📋</span><span>Contas</span></button>
   </nav>
 
-  <section class="stats-grid" aria-label="Resumo do mês">
-    <div class="stat-tile">
-      <span class="stat-label">Receitas</span>
-      <span class="stat-value" id="stat-income">R$ 0,00</span>
-    </div>
-    <div class="stat-tile">
-      <span class="stat-label">Despesas</span>
-      <span class="stat-value" id="stat-expense">R$ 0,00</span>
-    </div>
-    <div class="stat-tile">
-      <span class="stat-label">Saldo</span>
-      <span class="stat-value" id="stat-balance">R$ 0,00</span>
-    </div>
-  </section>
-
-  <section class="card" aria-labelledby="add-title">
-    <h2 id="add-title">Adicionar</h2>
-    <form id="tx-form" class="tx-form">
-      <div class="segmented" role="radiogroup" aria-label="Tipo">
-        <button type="button" class="segmented-btn is-active" data-type="expense" role="radio" aria-checked="true">Gasto</button>
-        <button type="button" class="segmented-btn" data-type="income" role="radio" aria-checked="false">Receita</button>
+  <div class="modal-backdrop" id="modal-backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head">
+        <h2 id="modal-title">Adicionar</h2>
+        <button type="button" class="icon-btn" id="modal-close" aria-label="Fechar">✕</button>
       </div>
+      <form id="tx-form" class="tx-form">
+        <div class="segmented" role="radiogroup" aria-label="Tipo">
+          <button type="button" class="segmented-btn is-active" data-type="expense" role="radio" aria-checked="true">Gasto</button>
+          <button type="button" class="segmented-btn" data-type="income" role="radio" aria-checked="false">Receita</button>
+        </div>
 
-      <div class="field-row">
+        <div class="field-row">
+          <label class="field">
+            <span>Valor (R$)</span>
+            <input type="text" inputmode="decimal" id="tx-amount" placeholder="0,00" required>
+          </label>
+          <label class="field">
+            <span>Categoria</span>
+            <select id="tx-category"></select>
+          </label>
+        </div>
+
         <label class="field">
-          <span>Valor (R$)</span>
-          <input type="text" inputmode="decimal" id="tx-amount" placeholder="0,00" required>
+          <span>Descrição (opcional)</span>
+          <input type="text" id="tx-description" placeholder="Ex: compras da semana">
         </label>
-        <label class="field" id="tx-category-field">
-          <span>Categoria</span>
-          <select id="tx-category"></select>
+
+        <label class="field">
+          <span>Data</span>
+          <input type="date" id="tx-date" required>
         </label>
-      </div>
 
-      <label class="field">
-        <span>Descrição (opcional)</span>
-        <input type="text" id="tx-description" placeholder="Ex: compras da semana">
-      </label>
-
-      <label class="field">
-        <span>Data</span>
-        <input type="date" id="tx-date" required>
-      </label>
-
-      <button type="submit" class="btn-primary">Adicionar</button>
-    </form>
-  </section>
-
-  <section class="card" id="chart-section" aria-labelledby="chart-title" hidden>
-    <h2 id="chart-title">Gastos por categoria</h2>
-    <div id="category-chart" class="category-chart"></div>
-  </section>
-
-  <section class="card" aria-labelledby="extrato-title">
-    <div class="card-header-row">
-      <h2 id="extrato-title">Extrato do mês</h2>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="tx-delete" hidden>Apagar</button>
+          <button type="submit" class="btn-primary" id="tx-submit">Adicionar</button>
+        </div>
+      </form>
     </div>
-    <ul id="transaction-list" class="transaction-list"></ul>
-    <p id="transaction-empty" class="empty-hint">Nenhuma transação neste mês ainda.</p>
-  </section>
-
-  <section class="card" aria-labelledby="goals-title">
-    <h2 id="goals-title">Metas de economia</h2>
-    <ul id="goals-list" class="goals-list"></ul>
-    <p id="goals-empty" class="empty-hint">Nenhuma meta cadastrada.</p>
-    <form id="goal-form" class="inline-form">
-      <label class="field">
-        <span>Nome da meta</span>
-        <input type="text" id="goal-name" placeholder="Ex: Viagem" required>
-      </label>
-      <label class="field">
-        <span>Valor alvo (R$)</span>
-        <input type="text" inputmode="decimal" id="goal-target" placeholder="2000,00" required>
-      </label>
-      <button type="submit" class="btn-secondary">Criar meta</button>
-    </form>
-  </section>
-
-  <section class="card" aria-labelledby="bills-title">
-    <h2 id="bills-title">Contas fixas</h2>
-    <ul id="bills-list" class="bills-list"></ul>
-    <p id="bills-empty" class="empty-hint">Nenhuma conta cadastrada.</p>
-    <form id="bill-form" class="inline-form">
-      <label class="field">
-        <span>Nome da conta</span>
-        <input type="text" id="bill-name" placeholder="Ex: Luz" required>
-      </label>
-      <label class="field">
-        <span>Valor (R$)</span>
-        <input type="text" inputmode="decimal" id="bill-amount" placeholder="150,00" required>
-      </label>
-      <label class="field">
-        <span>Dia do vencimento</span>
-        <input type="number" id="bill-due-day" min="1" max="31" placeholder="10" required>
-      </label>
-      <button type="submit" class="btn-secondary">Adicionar conta</button>
-    </form>
-  </section>
-
-  <footer class="app-footer">
-    <button type="button" id="export-btn" class="btn-link">Exportar backup (JSON)</button>
-    <label class="btn-link file-label">
-      Importar backup
-      <input type="file" id="import-input" accept="application/json" hidden>
-    </label>
-  </footer>
+  </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 </div>
