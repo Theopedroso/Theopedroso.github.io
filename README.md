@@ -122,6 +122,13 @@ Endpoints usados por trás (todos exigem o header `x-admin-key`):
 - Depois do deploy, atualize `API_BASE_URL` em `js/config.js` para a URL
   pública da API e faça commit.
 
+## Outras ferramentas neste repositório
+
+- **`whatsapp-financas-bot/`**: bot gratuito de WhatsApp (sem relação com o
+  diretório de empresas) para controle pessoal de salário, gastos, metas de
+  economia e contas a pagar por mensagem de texto, ao estilo do "Pierre
+  Finanças". Veja o README dentro da pasta para instruções de uso.
+
 ## Próximos passos (fora do escopo atual)
 
 - Plano pago "destaque" (campo `featured` já existe no schema) + integração
