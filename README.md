@@ -122,6 +122,22 @@ Endpoints usados por trás (todos exigem o header `x-admin-key`):
 - Depois do deploy, atualize `API_BASE_URL` em `js/config.js` para a URL
   pública da API e faça commit.
 
+## Outras ferramentas neste repositório
+
+- **`financas/`** (recomendado): app pessoal de finanças que roda direto no
+  navegador, publicado junto com o resto do site pelo GitHub Pages em
+  `/financas/`. Controla salário, gastos por categoria (com gráfico),
+  metas de economia e contas a pagar, com lembretes locais. Não tem link na
+  home (é uso pessoal) — acesse o endereço diretamente. Não depende de
+  servidor nem de processo rodando: os dados ficam salvos só no navegador
+  (`localStorage`), com opção de exportar/importar backup em JSON.
+- **`whatsapp-financas-bot/`**: versão alternativa do mesmo tipo de
+  ferramenta só que via chat de WhatsApp, ao estilo do "Pierre Finanças".
+  Exige um processo Node rodando o tempo todo (PC sempre ligado, um
+  servidor ou um Raspberry Pi) — por isso o app em `financas/` é a opção
+  recomendada para quem não quer manter nada ligado. Veja o README dentro
+  da pasta para instruções de uso.
+
 ## Próximos passos (fora do escopo atual)
 
 - Plano pago "destaque" (campo `featured` já existe no schema) + integração
