@@ -75,6 +75,11 @@
         <button type="button" class="btn-primary" id="setup-income-btn">Configurar</button>
       </div>
 
+      <div class="card" id="insights-card" hidden>
+        <h2><svg viewBox="0 0 24 24" class="icon"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12c1 1 1 2 1 3h6c0-1 0-2 1-3a7 7 0 0 0-4-12z"/></svg> Insights</h2>
+        <ul class="insights-list" id="insights-list"></ul>
+      </div>
+
       <div class="card" id="recurring-card" hidden>
         <h2><svg viewBox="0 0 24 24" class="icon"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> Recorrentes</h2>
         <ul class="recurring-list" id="recurring-list"></ul>
@@ -118,6 +123,10 @@
             Importar backup
             <input type="file" id="import-input" accept="application/json" hidden>
           </label>
+        </div>
+        <div class="backup-row" style="margin-top:10px">
+          <button type="button" class="btn-secondary" id="export-csv-btn">Exportar CSV</button>
+          <button type="button" class="btn-secondary" id="pin-toggle-btn">Proteger com PIN</button>
         </div>
       </div>
     </section>
@@ -230,7 +239,21 @@
           <svg viewBox="0 0 24 24" class="icon"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
         </button>
       </div>
-      <form id="tx-form" class="tx-form">
+      <div class="segmented mode-segmented" role="radiogroup" aria-label="Modo de lançamento">
+        <button type="button" class="segmented-btn is-active" data-mode="quick" role="radio" aria-checked="true">⚡ Rápido</button>
+        <button type="button" class="segmented-btn" data-mode="detailed" role="radio" aria-checked="false">📝 Detalhado</button>
+      </div>
+
+      <form id="tx-quick-form" class="tx-quick-form">
+        <label class="field">
+          <span>Descreva o lançamento</span>
+          <input type="text" id="tx-quick-input" placeholder="Ex: gastei 45 no mercado, recebi 200 de freela...">
+        </label>
+        <p class="quick-preview" id="tx-quick-preview">Digite algo pra eu entender sozinho ✨</p>
+        <button type="submit" class="btn-primary" id="tx-quick-submit" disabled>Adicionar</button>
+      </form>
+
+      <form id="tx-form" class="tx-form" hidden>
         <div class="segmented" role="radiogroup" aria-label="Tipo">
           <button type="button" class="segmented-btn is-active" data-type="expense" role="radio" aria-checked="true">Gasto</button>
           <button type="button" class="segmented-btn" data-type="income" role="radio" aria-checked="false">Receita</button>
@@ -309,6 +332,19 @@
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <div id="lock-screen" class="lock-screen" hidden>
+    <div class="lock-card">
+      <div class="lock-icon"><svg viewBox="0 0 24 24" class="icon"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+      <h2>Minhas Finanças</h2>
+      <p>Digite seu PIN pra continuar</p>
+      <form id="lock-form">
+        <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" id="lock-input" class="lock-input" autocomplete="off" placeholder="••••">
+        <button type="submit" class="btn-primary">Desbloquear</button>
+      </form>
+      <button type="button" class="link-btn" id="lock-forgot">Esqueci o PIN</button>
+    </div>
+  </div>
 </div>
 
 <script src="js/app.js"></script>

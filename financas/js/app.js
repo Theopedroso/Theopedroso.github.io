@@ -5,6 +5,7 @@
   var NOTIFIED_KEY = 'financas-notified-v1';
   var THEME_KEY = 'financas-theme';
   var ACCOUNT_KEY = 'financas-selected-account';
+  var PIN_KEY = 'financas-pin-hash';
   var DEFAULT_ACCOUNT_ID = 'default';
 
   // ---------- ícones (svg, sem emoji) ----------
@@ -29,6 +30,12 @@
     repeat: '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
     sun: '<circle cx="12" cy="12" r="4"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
     moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+    trendingUp: '<polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/>',
+    trendingDown: '<polyline points="3 7 9 13 13 9 21 17"/><polyline points="15 17 21 17 21 11"/>',
+    checkCircle: '<circle cx="12" cy="12" r="9"/><polyline points="8 12 11 15 16 9"/>',
+    alertTriangle: '<path d="M12 2 1 21h22z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    lightbulb: '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12c1 1 1 2 1 3h6c0-1 0-2 1-3a7 7 0 0 0-4-12z"/>',
+    target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/>',
   };
 
   function icon(name, size) {
@@ -135,6 +142,56 @@
     return isFinite(value) ? value : NaN;
   }
 
+  function removeAccents(str) {
+    return str.normalize('NFD').replace(/[̀-ͯ]/g, '');
+  }
+
+  var CATEGORY_KEYWORDS = {
+    moradia: ['aluguel', 'condominio', 'iptu', 'moradia', 'casa'],
+    alimentacao: ['mercado', 'supermercado', 'ifood', 'restaurante', 'lanche', 'comida', 'almoco', 'janta', 'padaria', 'feira'],
+    transporte: ['uber', 'gasolina', 'combustivel', 'onibus', 'metro', 'transporte', '99', 'taxi', 'carro'],
+    saude: ['farmacia', 'remedio', 'medico', 'plano de saude', 'academia', 'dentista'],
+    lazer: ['cinema', 'show', 'viagem', 'bar', 'balada', 'netflix', 'jogo', 'streaming', 'passeio'],
+    educacao: ['curso', 'livro', 'faculdade', 'escola', 'material escolar'],
+    contas: ['luz', 'agua', 'internet', 'telefone', 'celular', 'conta de'],
+  };
+
+  var INCOME_KEYWORDS = ['recebi', 'ganhei', 'entrou', 'caiu'];
+  var SALARY_KEYWORDS = ['salario', 'salário'];
+  var EXPENSE_KEYWORDS = ['gastei', 'paguei', 'comprei', 'gasto'];
+
+  // Interpreta frases como "gastei 45 no mercado" ou "recebi 200 de freela"
+  function parseNaturalLanguage(text) {
+    var raw = (text || '').trim();
+    if (!raw) return null;
+    var normalized = removeAccents(raw.toLowerCase());
+
+    var amountMatch = raw.match(/(\d+(?:[.,]\d+)?)/);
+    if (!amountMatch) return null;
+    var amount = parseAmount(amountMatch[1]);
+    if (!amount || amount <= 0) return null;
+
+    var type = 'expense';
+    if (/^\s*-/.test(raw)) type = 'expense';
+    else if (/^\s*\+/.test(raw)) type = 'income';
+    else if (INCOME_KEYWORDS.some(function (k) { return normalized.indexOf(k) !== -1; })) type = 'income';
+    else if (SALARY_KEYWORDS.some(function (k) { return normalized.indexOf(k) !== -1; })) type = 'income';
+    else if (EXPENSE_KEYWORDS.some(function (k) { return normalized.indexOf(k) !== -1; })) type = 'expense';
+
+    var category = 'outros';
+    if (type === 'income') {
+      category = SALARY_KEYWORDS.some(function (k) { return normalized.indexOf(k) !== -1; }) ? 'salario' : 'outros';
+    } else {
+      Object.keys(CATEGORY_KEYWORDS).some(function (key) {
+        var hit = CATEGORY_KEYWORDS[key].some(function (k) { return normalized.indexOf(k) !== -1; });
+        if (hit) category = key;
+        return hit;
+      });
+    }
+
+    return { type: type, amount: amount, category: category, description: raw };
+  }
+
   function pad(n) { return String(n).padStart(2, '0'); }
   function isoDate(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
   function todayISO() { return isoDate(new Date()); }
@@ -146,6 +203,24 @@
     var div = document.createElement('div');
     div.textContent = str == null ? '' : str;
     return div.innerHTML;
+  }
+
+  var animState = {};
+  function animateNumber(el, key, toValue) {
+    var from = Object.prototype.hasOwnProperty.call(animState, key) ? animState[key] : toValue;
+    animState[key] = toValue;
+    if (Math.abs(from - toValue) < 0.005) { el.textContent = money(toValue); return; }
+    var start = null;
+    var duration = 500;
+    function step(ts) {
+      if (start === null) start = ts;
+      var progress = Math.min(1, (ts - start) / duration);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = money(from + (toValue - from) * eased);
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = money(toValue);
+    }
+    requestAnimationFrame(step);
   }
 
   var toastTimer = null;
@@ -206,6 +281,8 @@
 
     incomeCtaCard: document.getElementById('income-cta-card'),
     setupIncomeBtn: document.getElementById('setup-income-btn'),
+    insightsCard: document.getElementById('insights-card'),
+    insightsList: document.getElementById('insights-list'),
     recurringCard: document.getElementById('recurring-card'),
     recurringList: document.getElementById('recurring-list'),
 
@@ -242,6 +319,12 @@
 
     exportBtn: document.getElementById('export-btn'),
     importInput: document.getElementById('import-input'),
+    exportCsvBtn: document.getElementById('export-csv-btn'),
+    pinToggleBtn: document.getElementById('pin-toggle-btn'),
+    lockScreen: document.getElementById('lock-screen'),
+    lockForm: document.getElementById('lock-form'),
+    lockInput: document.getElementById('lock-input'),
+    lockForgot: document.getElementById('lock-forgot'),
 
     fabAdd: document.getElementById('fab-add'),
     modalBackdrop: document.getElementById('modal-backdrop'),
@@ -258,7 +341,12 @@
     txRecurringField: document.getElementById('tx-recurring-field'),
     txRecurring: document.getElementById('tx-recurring'),
     txRecurringNote: document.getElementById('tx-recurring-note'),
-    segmentedBtns: document.querySelectorAll('.segmented-btn'),
+    segmentedBtns: document.querySelectorAll('#tx-form .segmented-btn'),
+    modeSegmentedBtns: document.querySelectorAll('.mode-segmented .segmented-btn'),
+    txQuickForm: document.getElementById('tx-quick-form'),
+    txQuickInput: document.getElementById('tx-quick-input'),
+    txQuickPreview: document.getElementById('tx-quick-preview'),
+    txQuickSubmit: document.getElementById('tx-quick-submit'),
 
     accountModalBackdrop: document.getElementById('account-modal-backdrop'),
     accountModalClose: document.getElementById('account-modal-close'),
@@ -381,6 +469,7 @@
     renderMonthLabel();
     renderHero();
     renderIncomeCta();
+    renderInsights();
     renderRecurringList();
     renderCategoryChart();
     renderPreviewList();
@@ -422,28 +511,98 @@
     els.monthLabel.textContent = label.charAt(0).toUpperCase() + label.slice(1);
   }
 
-  function renderHero() {
-    var totals = monthTotals(viewedYear, viewedMonth);
-    els.statIncome.textContent = money(totals.income);
-    els.statExpense.textContent = money(totals.expense);
-    els.heroBalance.textContent = money(totals.balance);
-
-    var prevMonth = viewedMonth - 1, prevYear = viewedYear;
+  function computeExpenseDelta(year, month) {
+    var totals = monthTotals(year, month);
+    var prevMonth = month - 1, prevYear = year;
     if (prevMonth < 1) { prevMonth = 12; prevYear -= 1; }
     var prevTotals = monthTotals(prevYear, prevMonth);
+    if (!(prevTotals.expense > 0 && totals.expense > 0)) return null;
+    var pct = ((totals.expense - prevTotals.expense) / prevTotals.expense) * 100;
+    var prevLabel = new Date(prevYear, prevMonth - 1, 1).toLocaleDateString('pt-BR', { month: 'long' });
+    return { pct: pct, prevLabel: prevLabel };
+  }
 
-    if (prevTotals.expense > 0 && totals.expense > 0) {
-      var diffPct = ((totals.expense - prevTotals.expense) / prevTotals.expense) * 100;
-      var prevLabel = new Date(prevYear, prevMonth - 1, 1).toLocaleDateString('pt-BR', { month: 'long' });
-      if (Math.abs(diffPct) < 1) {
-        els.heroDelta.textContent = '≈ igual a ' + prevLabel + ' em gastos';
+  function renderHero() {
+    var totals = monthTotals(viewedYear, viewedMonth);
+    animateNumber(els.statIncome, 'income', totals.income);
+    animateNumber(els.statExpense, 'expense', totals.expense);
+    animateNumber(els.heroBalance, 'balance', totals.balance);
+
+    var delta = computeExpenseDelta(viewedYear, viewedMonth);
+    if (delta) {
+      if (Math.abs(delta.pct) < 1) {
+        els.heroDelta.textContent = '≈ igual a ' + delta.prevLabel + ' em gastos';
       } else {
-        els.heroDelta.textContent = (diffPct > 0 ? '▲ ' : '▼ ') + Math.abs(diffPct).toFixed(0) + '% em gastos vs ' + prevLabel;
+        els.heroDelta.textContent = (delta.pct > 0 ? '▲ ' : '▼ ') + Math.abs(delta.pct).toFixed(0) + '% em gastos vs ' + delta.prevLabel;
       }
       els.heroDelta.hidden = false;
     } else {
       els.heroDelta.hidden = true;
     }
+  }
+
+  function generateInsights() {
+    var insights = [];
+    var totals = monthTotals(viewedYear, viewedMonth);
+    var rows = expenseBreakdown(viewedYear, viewedMonth);
+
+    if (rows.length && totals.expense > 0) {
+      var top = rows[0];
+      var topPct = (top.total / totals.expense) * 100;
+      if (topPct >= 30) {
+        var topInfo = categoryInfo('expense', top.key);
+        insights.push({ type: 'info', icon: topInfo.icon, text: topInfo.label + ' é sua maior categoria este mês (' + topPct.toFixed(0) + '% dos gastos).' });
+      }
+    }
+
+    var delta = computeExpenseDelta(viewedYear, viewedMonth);
+    if (delta) {
+      if (delta.pct >= 15) {
+        insights.push({ type: 'warning', icon: 'trendingUp', text: 'Você gastou ' + delta.pct.toFixed(0) + '% a mais que em ' + delta.prevLabel + '.' });
+      } else if (delta.pct <= -15) {
+        insights.push({ type: 'good', icon: 'trendingDown', text: 'Você gastou ' + Math.abs(delta.pct).toFixed(0) + '% a menos que em ' + delta.prevLabel + '. Mandou bem!' });
+      }
+    }
+
+    var budgetKeys = Object.keys(state.budgets);
+    if (budgetKeys.length) {
+      var spentByCategory = {};
+      rows.forEach(function (r) { spentByCategory[r.key] = r.total; });
+      var overCount = budgetKeys.filter(function (k) { return (spentByCategory[k] || 0) > state.budgets[k]; }).length;
+      if (overCount > 0) {
+        insights.push({ type: 'warning', icon: 'alertTriangle', text: 'Você estourou o orçamento em ' + overCount + ' categoria' + (overCount > 1 ? 's' : '') + ' este mês.' });
+      } else {
+        insights.push({ type: 'good', icon: 'checkCircle', text: 'Você está dentro do orçamento em todas as categorias com limite definido.' });
+      }
+    }
+
+    var openGoals = state.goals
+      .filter(function (g) { return g.saved < g.target; })
+      .sort(function (a, b) { return (b.saved / b.target) - (a.saved / a.target); });
+    if (openGoals.length) {
+      var g = openGoals[0];
+      insights.push({ type: 'info', icon: 'target', text: 'Faltam ' + money(g.target - g.saved) + ' pra bater sua meta "' + g.name + '".' });
+    }
+
+    var range = monthsBackFrom(viewedYear, viewedMonth, 6);
+    var streak = 0;
+    for (var i = range.length - 1; i >= 0; i--) {
+      var t = monthTotals(range[i].year, range[i].month);
+      if (t.balance >= 0 && (t.income > 0 || t.expense > 0)) streak++; else break;
+    }
+    if (streak >= 2) {
+      insights.push({ type: 'good', icon: 'trendingUp', text: streak + ' meses seguidos com saldo positivo. Continue assim!' });
+    }
+
+    return insights.slice(0, 4);
+  }
+
+  function renderInsights() {
+    var insights = generateInsights();
+    els.insightsCard.hidden = insights.length === 0;
+    els.insightsList.innerHTML = insights.map(function (i) {
+      return '<li class="insight-item"><span class="insight-icon ' + i.type + '">' + icon(i.icon, 16) + '</span><span>' + escapeHtml(i.text) + '</span></li>';
+    }).join('');
   }
 
   function renderIncomeCta() {
@@ -869,6 +1028,65 @@
     btn.addEventListener('click', function () { setType(btn.getAttribute('data-type')); });
   });
 
+  function setEntryMode(mode) {
+    els.modeSegmentedBtns.forEach(function (b) {
+      var active = b.getAttribute('data-mode') === mode;
+      b.classList.toggle('is-active', active);
+      b.setAttribute('aria-checked', String(active));
+    });
+    els.txQuickForm.hidden = mode !== 'quick';
+    els.txForm.hidden = mode !== 'detailed';
+    if (mode === 'quick') {
+      els.txQuickInput.value = '';
+      updateQuickPreview();
+      setTimeout(function () { els.txQuickInput.focus(); }, 10);
+    }
+  }
+
+  els.modeSegmentedBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () { setEntryMode(btn.getAttribute('data-mode')); });
+  });
+
+  function updateQuickPreview() {
+    var parsed = parseNaturalLanguage(els.txQuickInput.value);
+    if (!els.txQuickInput.value.trim()) {
+      els.txQuickPreview.textContent = 'Digite algo pra eu entender sozinho ✨';
+      els.txQuickPreview.className = 'quick-preview';
+      els.txQuickSubmit.disabled = true;
+      return null;
+    }
+    if (!parsed) {
+      els.txQuickPreview.textContent = '🤔 Não encontrei um valor. Tente algo como "gastei 45 no mercado".';
+      els.txQuickPreview.className = 'quick-preview is-error';
+      els.txQuickSubmit.disabled = true;
+      return null;
+    }
+    var info = categoryInfo(parsed.type, parsed.category);
+    var verb = parsed.type === 'income' ? 'Receita' : 'Gasto';
+    els.txQuickPreview.innerHTML = '→ ' + verb + ' de ' + money(parsed.amount) + ' · ' + icon(info.icon, 14) + ' ' + escapeHtml(info.label);
+    els.txQuickPreview.className = 'quick-preview is-ready';
+    els.txQuickSubmit.disabled = false;
+    return parsed;
+  }
+
+  els.txQuickInput.addEventListener('input', updateQuickPreview);
+
+  els.txQuickForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var parsed = updateQuickPreview();
+    if (!parsed) return;
+    var accountId = selectedAccountId !== 'all' ? selectedAccountId : DEFAULT_ACCOUNT_ID;
+    state.transactions.push({
+      id: genId(), type: parsed.type, amount: parsed.amount, category: parsed.category,
+      description: parsed.description, date: defaultDateForViewedMonth(), createdAt: Date.now(),
+      accountId: accountId, recurringId: null,
+    });
+    saveState();
+    closeModal();
+    render();
+    showToast(parsed.type === 'income' ? 'Receita adicionada!' : 'Gasto adicionado!');
+  });
+
   function openModal() { els.modalBackdrop.hidden = false; }
   function closeModal() { els.modalBackdrop.hidden = true; editingTxId = null; }
 
@@ -895,12 +1113,14 @@
     els.txRecurring.disabled = false;
     if (presets && presets.category) els.txCategory.value = presets.category;
     if (presets && presets.recurring) els.txRecurring.checked = true;
+    setEntryMode(presets ? 'detailed' : 'quick');
     openModal();
-    els.txAmount.focus();
+    if (!presets) setTimeout(function () { els.txQuickInput.focus(); }, 10);
   }
 
   function openModalForEdit(tx) {
     editingTxId = tx.id;
+    setEntryMode('detailed');
     els.modalTitle.textContent = 'Editar transação';
     els.txSubmit.textContent = 'Salvar';
     els.txDelete.hidden = false;
@@ -1092,6 +1312,99 @@
     els.importInput.value = '';
   });
 
+  // ---------- exportar csv ----------
+
+  function csvEscape(value) {
+    var str = String(value == null ? '' : value);
+    if (/[",\n]/.test(str)) return '"' + str.replace(/"/g, '""') + '"';
+    return str;
+  }
+
+  els.exportCsvBtn.addEventListener('click', function () {
+    var header = ['Data', 'Tipo', 'Categoria', 'Descrição', 'Valor', 'Carteira'];
+    var rows = state.transactions
+      .slice()
+      .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; })
+      .map(function (t) {
+        var info = categoryInfo(t.type, t.category);
+        var acc = accountById(txAccountId(t));
+        return [
+          t.date,
+          t.type === 'income' ? 'Receita' : 'Gasto',
+          info.label,
+          t.description || '',
+          String(t.amount).replace('.', ','),
+          acc ? acc.name : '',
+        ].map(csvEscape).join(',');
+      });
+    var csv = '﻿' + header.join(',') + '\n' + rows.join('\n');
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'financas-extrato-' + todayISO() + '.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  // ---------- proteção por pin ----------
+
+  async function hashPin(pin) {
+    var enc = new TextEncoder().encode(pin);
+    var buf = await crypto.subtle.digest('SHA-256', enc);
+    return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+
+  function refreshPinButton() {
+    els.pinToggleBtn.textContent = localStorage.getItem(PIN_KEY) ? 'Remover proteção com PIN' : 'Proteger com PIN';
+  }
+
+  els.pinToggleBtn.addEventListener('click', async function () {
+    var hasPin = !!localStorage.getItem(PIN_KEY);
+    if (!hasPin) {
+      var pin = prompt('Crie um PIN de 4 a 6 números:');
+      if (pin == null) return;
+      if (!/^\d{4,6}$/.test(pin)) { showToast('PIN inválido. Use de 4 a 6 números.'); return; }
+      var confirmPin = prompt('Confirme o PIN:');
+      if (confirmPin !== pin) { showToast('Os PINs não coincidem.'); return; }
+      localStorage.setItem(PIN_KEY, await hashPin(pin));
+      showToast('PIN ativado! Vai ser pedido toda vez que abrir o app.');
+    } else {
+      var current = prompt('Digite seu PIN atual pra remover a proteção:');
+      if (current == null) return;
+      var currentHash = await hashPin(current);
+      if (currentHash !== localStorage.getItem(PIN_KEY)) { showToast('PIN incorreto.'); return; }
+      localStorage.removeItem(PIN_KEY);
+      showToast('Proteção removida.');
+    }
+    refreshPinButton();
+  });
+
+  function showLockScreenIfNeeded() {
+    if (!localStorage.getItem(PIN_KEY)) return;
+    els.lockScreen.hidden = false;
+    setTimeout(function () { els.lockInput.focus(); }, 50);
+  }
+
+  els.lockForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var attempt = await hashPin(els.lockInput.value);
+    if (attempt === localStorage.getItem(PIN_KEY)) {
+      els.lockScreen.hidden = true;
+      els.lockInput.value = '';
+    } else {
+      showToast('PIN incorreto.');
+      els.lockInput.value = '';
+      els.lockInput.focus();
+    }
+  });
+
+  els.lockForgot.addEventListener('click', function () {
+    if (confirm('Sem o PIN não dá pra recuperar seus dados salvos neste navegador. A única opção é apagar tudo e começar de novo. Apagar tudo?')) {
+      localStorage.clear();
+      location.reload();
+    }
+  });
+
   // ---------- notificações de contas ----------
 
   function checkBillNotifications() {
@@ -1135,6 +1448,8 @@
   render();
   checkBillNotifications();
   refreshNotifToggle();
+  refreshPinButton();
+  showLockScreenIfNeeded();
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(function (err) {
