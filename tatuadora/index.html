@@ -8,8 +8,8 @@
      RASCUNHO / STARTER — Site de tatuadora (tema escuro minimalista)
      Tudo marcado com [TROCAR] é placeholder para personalizar depois.
      ============================================================ -->
-<title>[TROCAR: Nome] · Tatuadora</title>
-<meta name="description" content="[TROCAR: descrição curta — estilo e cidade da tatuadora]" />
+<title>Oliver · Tatuadora — Fineline, Whip Shading & Blackwork</title>
+<meta name="description" content="Oliver Tattoo — tatuadora especializada em fineline, whip shading, blackwork e arte anime. Agende sua tatuagem." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,8 +24,8 @@
     --line:      #26262e;
     --text:      #ececf1;
     --muted:     #9a9aa6;
-    --accent:    #c8a15a;   /* dourado sóbrio — troque pela cor da marca dela */
-    --accent-2:  #e7d3a8;
+    --accent:    #cfcfd6;   /* prata/monocromático — combina com fineline e blackwork */
+    --accent-2:  #ffffff;
     --radius:    14px;
     --maxw:      1140px;
   }
@@ -81,7 +81,7 @@
   .hero {
     min-height: 100vh; display: flex; align-items: center; position: relative;
     background:
-      radial-gradient(1200px 600px at 70% -10%, rgba(200,161,90,.10), transparent 60%),
+      radial-gradient(1200px 600px at 70% -10%, rgba(255,255,255,.10), transparent 60%),
       linear-gradient(180deg, #0b0b0d 0%, #0e0e12 100%);
     overflow: hidden;
   }
@@ -156,7 +156,7 @@
   .tile span { color: var(--muted); font-size: .75rem; letter-spacing: .12em; }
   .tile::before {
     content: ""; position: absolute; inset: 0;
-    background: radial-gradient(circle at 30% 20%, rgba(200,161,90,.08), transparent 55%);
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.08), transparent 55%);
   }
 
   /* Contato */
@@ -173,7 +173,7 @@
   .contact-item:hover { border-color: var(--accent); transform: translateX(4px); }
   .contact-item .ci-ico {
     width: 42px; height: 42px; flex: 0 0 42px; border-radius: 10px;
-    background: rgba(200,161,90,.12); display: flex; align-items: center; justify-content: center; color: var(--accent);
+    background: rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; color: var(--accent);
   }
   .contact-item .ci-ico svg { width: 22px; height: 22px; }
   .contact-item .ci-label { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
@@ -228,7 +228,7 @@
 <!-- ===================== NAV ===================== -->
 <header class="nav" id="nav">
   <div class="wrap nav-inner">
-    <a href="#top" class="brand">[TROCAR]<span>.</span></a>
+    <a href="#top" class="brand">Oliver<span>.</span></a>
     <nav class="nav-links" id="navLinks">
       <a href="#sobre">Sobre</a>
       <a href="#estilos">Estilos</a>
@@ -245,11 +245,11 @@
 <!-- ===================== HERO ===================== -->
 <section class="hero" id="top">
   <div class="wrap">
-    <p class="eyebrow">Tatuadora · [TROCAR: cidade]</p>
-    <h1>Arte na pele,<br /><em>com intenção.</em></h1>
-    <p class="lead">[TROCAR: uma frase de apresentação. Ex: "Especialista em fineline e blackwork. Cada traço é pensado para durar e contar a sua história."]</p>
+    <p class="eyebrow">Oliver · Tatuadora</p>
+    <h1>Arte na pele,<br /><em>traço por traço.</em></h1>
+    <p class="lead">Fineline, whip shading, blackwork e arte anime. Cada tatuagem é pensada para durar e traduzir a sua ideia com delicadeza e contraste.</p>
     <div class="hero-actions">
-      <a href="#contato" class="btn btn-primary">
+      <a href="https://wa.me/message/KP43U7CJSDF3G1" target="_blank" rel="noopener" class="btn btn-primary">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42l-.48-.01c-.16 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>
         Falar no WhatsApp
       </a>
@@ -264,9 +264,10 @@
     <div class="about-photo">[TROCAR: foto da tatuadora]</div>
     <div class="about-text">
       <p class="eyebrow">Sobre</p>
-      <h2>Prazer, sou a [TROCAR: nome].</h2>
-      <p>[TROCAR: parágrafo de apresentação. Conte a trajetória dela — há quanto tempo tatua, o que a move, o tipo de atmosfera que oferece no estúdio.]</p>
-      <p>[TROCAR: segundo parágrafo opcional — filosofia de trabalho, cuidado com higiene, atendimento personalizado, etc.]</p>
+      <h2>Prazer, sou a Oliver.</h2>
+      <!-- TEXTO RASCUNHO — Oliver, ajusta do teu jeito! -->
+      <p>Sou tatuadora apaixonada por transformar ideias em arte na pele. Trabalho com fineline, whip shading, blackwork e arte anime, sempre buscando o traço certo para cada história.</p>
+      <p>Cada projeto é autoral e feito com atenção total ao seu conforto: ambiente acolhedor, material 100% descartável e um atendimento próximo, do primeiro contato à cicatrização.</p>
       <div class="stats">
         <div class="stat"><div class="num">+[X]</div><div class="lbl">Anos de carreira</div></div>
         <div class="stat"><div class="num">+[X]</div><div class="lbl">Tatuagens feitas</div></div>
@@ -282,13 +283,13 @@
     <div class="section-head">
       <p class="eyebrow">Especialidades</p>
       <h2>Estilos que eu tatuo</h2>
-      <p>[TROCAR: ajuste os cards abaixo para os estilos reais dela. Apague os que não fizer sentido.]</p>
+      <p>Do traço mais delicado ao preto mais marcante — cada estilo com sua técnica e cuidado.</p>
     </div>
     <div class="styles-grid">
-      <div class="style-card"><div class="ico">✦</div><h3>Fineline</h3><p>Traços finos e delicados, ideais para desenhos minimalistas e detalhados.</p></div>
-      <div class="style-card"><div class="ico">◆</div><h3>Blackwork</h3><p>Preenchimentos sólidos em preto, contrastes marcantes e composições fortes.</p></div>
-      <div class="style-card"><div class="ico">❀</div><h3>Floral / Botânico</h3><p>Flores, folhas e elementos da natureza com leveza e movimento.</p></div>
-      <div class="style-card"><div class="ico">✎</div><h3>Autoral</h3><p>Projetos criados exclusivamente para você, do conceito ao traço final.</p></div>
+      <div class="style-card"><div class="ico">✦</div><h3>Fineline</h3><p>Traços finos e delicados, ideais para desenhos minimalistas, escritas e detalhes.</p></div>
+      <div class="style-card"><div class="ico">◗</div><h3>Whip Shading</h3><p>Sombreados suaves feitos com movimento de chicote, criando gradientes leves e orgânicos.</p></div>
+      <div class="style-card"><div class="ico">◆</div><h3>Blackwork</h3><p>Preenchimentos sólidos em preto, contrastes marcantes e composições de forte presença.</p></div>
+      <div class="style-card"><div class="ico">✧</div><h3>Arte Anime</h3><p>Personagens e cenas do universo anime e mangá, do fineline ao preto e cinza.</p></div>
     </div>
   </div>
 </section>
@@ -299,7 +300,7 @@
     <div class="section-head">
       <p class="eyebrow">Trabalhos</p>
       <h2>Portfólio</h2>
-      <p>[TROCAR: substitua cada bloco por uma foto real. Instruções de como fazer isso estão no comentário do código.]</p>
+      <p>Uma seleção de trabalhos autorais. Toque em uma imagem para ampliar.</p>
     </div>
     <!--
       COMO ADICIONAR AS FOTOS:
@@ -327,22 +328,22 @@
     <div>
       <p class="eyebrow">Vamos criar juntos</p>
       <h2>Bora tatuar?</h2>
-      <p>[TROCAR: chamada para ação. Ex: "Me chama no WhatsApp com a ideia, referências e a região do corpo. Retorno com orçamento e disponibilidade."]</p>
+      <p>Me chama no WhatsApp com a sua ideia, referências e a região do corpo. Retorno com orçamento e disponibilidade de horário.</p>
       <div class="contact-list">
-        <!-- WhatsApp: troque o número (formato 55 + DDD + número, só dígitos) -->
-        <a class="contact-item" href="https://wa.me/5500000000000?text=Oi!%20Vim%20pelo%20site%20e%20quero%20agendar%20uma%20tatuagem." target="_blank" rel="noopener">
+        <!-- WhatsApp: link de contato direto da Oliver (extraído da bio do Instagram) -->
+        <a class="contact-item" href="https://wa.me/message/KP43U7CJSDF3G1" target="_blank" rel="noopener">
           <span class="ci-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm4.52 11.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42l-.48-.01c-.16 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg></span>
-          <span><span class="ci-label">WhatsApp</span><br /><span class="ci-value">(00) 00000-0000</span></span>
+          <span><span class="ci-label">WhatsApp</span><br /><span class="ci-value">Toque para conversar</span></span>
         </a>
-        <!-- Instagram: troque o @ -->
-        <a class="contact-item" href="https://instagram.com/[TROCAR]" target="_blank" rel="noopener">
+        <!-- Instagram -->
+        <a class="contact-item" href="https://instagram.com/oliver_tattooo" target="_blank" rel="noopener">
           <span class="ci-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>
-          <span><span class="ci-label">Instagram</span><br /><span class="ci-value">@[TROCAR]</span></span>
+          <span><span class="ci-label">Instagram</span><br /><span class="ci-value">@oliver_tattooo</span></span>
         </a>
-        <!-- Localização -->
-        <a class="contact-item" href="#" target="_blank" rel="noopener">
+        <!-- Localização — [TROCAR: cidade/bairro do estúdio, quando a Oliver confirmar] -->
+        <a class="contact-item" href="https://instagram.com/oliver_tattooo" target="_blank" rel="noopener">
           <span class="ci-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-          <span><span class="ci-label">Estúdio</span><br /><span class="ci-value">[TROCAR: bairro / cidade]</span></span>
+          <span><span class="ci-label">Estúdio</span><br /><span class="ci-value">[TROCAR: cidade / bairro]</span></span>
         </a>
       </div>
     </div>
@@ -359,16 +360,16 @@
 <!-- ===================== FOOTER ===================== -->
 <footer class="ft">
   <div class="wrap ft-inner">
-    <div class="ft-brand">[TROCAR: Nome]<span>.</span></div>
+    <div class="ft-brand">Oliver<span>.</span></div>
     <div class="ft-social">
-      <a href="https://instagram.com/[TROCAR]" target="_blank" rel="noopener" aria-label="Instagram">
+      <a href="https://instagram.com/oliver_tattooo" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
       </a>
-      <a href="https://wa.me/5500000000000" target="_blank" rel="noopener" aria-label="WhatsApp">
+      <a href="https://wa.me/message/KP43U7CJSDF3G1" target="_blank" rel="noopener" aria-label="WhatsApp">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Z"/></svg>
       </a>
     </div>
-    <div class="ft-copy">© <span id="year"></span> [TROCAR: Nome]. Todos os direitos reservados.</div>
+    <div class="ft-copy">© <span id="year"></span> Oliver Tattoo. Todos os direitos reservados.</div>
   </div>
 </footer>
 
