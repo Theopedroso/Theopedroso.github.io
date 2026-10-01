@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <!-- ============================================================
-     RASCUNHO / STARTER — Site de tatuadora (tema escuro minimalista)
-     Tudo marcado com [TROCAR] é placeholder para personalizar depois.
+     Site de Oliver Tattoo — tatuadora em Tatuí-SP (tema escuro minimalista)
+     Portfólio gerenciado pelo painel em /tatuadora/admin/ (photos.json).
      ============================================================ -->
 <title>Oliver · Tatuadora — Fineline, Whip Shading & Blackwork</title>
 <meta name="description" content="Oliver Tattoo — tatuadora em Tatuí-SP especializada em fineline, whip shading, blackwork e arte anime. Agende pelo WhatsApp." />
@@ -121,10 +121,9 @@
   .about { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
   .about-photo {
     aspect-ratio: 4/5; border-radius: var(--radius); border: 1px solid var(--line);
-    background: linear-gradient(135deg, #1b1b22, #101015);
-    display: flex; align-items: center; justify-content: center; color: var(--muted);
-    font-size: .8rem; letter-spacing: .1em; text-align: center; padding: 20px;
+    background: linear-gradient(135deg, #1b1b22, #101015); overflow: hidden;
   }
+  .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .about-text h2 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 20px; }
   .about-text p { color: var(--muted); margin-bottom: 16px; }
   .stats { display: flex; gap: 40px; margin-top: 34px; flex-wrap: wrap; }
@@ -285,13 +284,13 @@
 <!-- ===================== SOBRE ===================== -->
 <section id="sobre">
   <div class="wrap about">
-    <div class="about-photo">[TROCAR: foto da tatuadora]</div>
+    <div class="about-photo"><img src="img/oliver.jpg" alt="Oliver, tatuadora em Tatuí-SP" /></div>
     <div class="about-text">
       <p class="eyebrow">Sobre</p>
       <h2>Prazer, sou a Oliver.</h2>
       <!-- TEXTO RASCUNHO — Oliver, ajusta do teu jeito! -->
-      <p>Sou tatuadora apaixonada por transformar ideias em arte na pele. Trabalho com fineline, whip shading, blackwork e arte anime, sempre buscando o traço certo para cada história.</p>
-      <p>Cada projeto é autoral e feito com atenção total ao seu conforto: ambiente acolhedor, material 100% descartável e um atendimento próximo, do primeiro contato à cicatrização.</p>
+      <p>Sou a Oliver, tatuadora em Tatuí – SP. Transformo ideias em arte na pele com um traço autoral que passeia entre a delicadeza do fineline e a força do blackwork — e amo dar vida a personagens de anime e peças cyber tribal.</p>
+      <p>Cada projeto é desenhado exclusivamente para você, num ambiente acolhedor, com material 100% descartável e todo o cuidado do primeiro contato à cicatrização. Bora criar algo que seja a sua cara?</p>
       <div class="stats">
         <div class="stat"><div class="num">+160</div><div class="lbl">Trabalhos publicados</div></div>
         <div class="stat"><div class="num">4</div><div class="lbl">Estilos autorais</div></div>
