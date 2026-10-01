@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ============================================================
+     Site de Oliver Tattoo — tatuadora em Tatuí-SP (tema escuro minimalista)
+     Portfólio gerenciado pelo painel em /tatuadora/admin/ (photos.json).
+     ============================================================ -->
+<title>Oliver · Tatuadora — Fineline, Whip Shading & Blackwork</title>
+<meta name="description" content="Oliver Tattoo — tatuadora em Tatuí-SP especializada em fineline, whip shading, blackwork e arte anime. Agende pelo WhatsApp." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    /* Paleta escura — ajuste aqui para mudar o clima do site inteiro */
+    --bg:        #0b0b0d;
+    --bg-soft:   #131317;
+    --bg-card:   #17171c;
+    --line:      #26262e;
+    --text:      #ececf1;
+    --muted:     #9a9aa6;
+    --accent:    #cfcfd6;   /* prata/monocromático — combina com fineline e blackwork */
+    --accent-2:  #ffffff;
+    --radius:    14px;
+    --maxw:      1140px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+
+  .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+
+  h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; line-height: 1.1; }
+
+  .eyebrow {
+    font-size: .72rem; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; margin-bottom: 14px;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: rgba(11,11,13,.72);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s, background .3s;
+  }
+  header.nav.scrolled { border-bottom-color: var(--line); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 66px; }
+  .brand { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; letter-spacing: .04em; }
+  .brand span { color: var(--accent); }
+  .nav-links { display: flex; gap: 30px; align-items: center; }
+  .nav-links a { font-size: .82rem; letter-spacing: .06em; color: var(--muted); transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    border: 1px solid var(--accent); color: var(--accent) !important;
+    padding: 9px 18px; border-radius: 999px; font-size: .78rem !important;
+    transition: background .2s, color .2s;
+  }
+  .nav-cta:hover { background: var(--accent); color: #0b0b0d !important; }
+  .burger { display: none; background: none; border: 0; color: var(--text); cursor: pointer; padding: 8px; }
+  .burger svg { width: 26px; height: 26px; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; position: relative;
+    background:
+      radial-gradient(1200px 600px at 70% -10%, rgba(255,255,255,.10), transparent 60%),
+      linear-gradient(180deg, #0b0b0d 0%, #0e0e12 100%);
+    overflow: hidden;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size: 44px 44px; pointer-events: none;
+  }
+  .hero .wrap { position: relative; z-index: 2; padding-top: 90px; padding-bottom: 60px; }
+  .hero h1 { font-size: clamp(2.8rem, 9vw, 6.2rem); letter-spacing: .01em; }
+  .hero h1 em { font-style: italic; color: var(--accent-2); }
+  .hero p.lead { max-width: 520px; margin-top: 22px; color: var(--muted); font-size: 1.05rem; }
+  .hero-actions { display: flex; gap: 14px; margin-top: 38px; flex-wrap: wrap; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 26px; border-radius: 999px; font-size: .9rem; letter-spacing: .03em;
+    font-weight: 400; cursor: pointer; transition: transform .15s, background .2s, border-color .2s, color .2s;
+    border: 1px solid var(--line);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--accent); color: #0b0b0d; border-color: var(--accent); font-weight: 500; }
+  .btn-primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
+  .btn-ghost { color: var(--text); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn svg { width: 18px; height: 18px; }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding: 100px 0; }
+  .section-head { max-width: 620px; margin-bottom: 54px; }
+  .section-head h2 { font-size: clamp(2rem, 5vw, 3.2rem); }
+  .section-head p { color: var(--muted); margin-top: 14px; }
+
+  /* Sobre */
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .about-photo {
+    aspect-ratio: 4/5; border-radius: var(--radius); border: 1px solid var(--line);
+    background: linear-gradient(135deg, #1b1b22, #101015); overflow: hidden;
+  }
+  .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .about-text h2 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 20px; }
+  .about-text p { color: var(--muted); margin-bottom: 16px; }
+  .stats { display: flex; gap: 40px; margin-top: 34px; flex-wrap: wrap; }
+  .stat .num { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; color: var(--accent); }
+  .stat .lbl { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+  /* Estilos */
+  .styles { background: var(--bg-soft); }
+  .styles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+  .style-card {
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 32px 26px; transition: border-color .25s, transform .25s;
+  }
+  .style-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .style-card .ico { font-size: 1.6rem; margin-bottom: 16px; }
+  .style-card h3 { font-size: 1.5rem; margin-bottom: 8px; }
+  .style-card p { color: var(--muted); font-size: .92rem; }
+
+  /* Portfólio */
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .tile {
+    aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; position: relative;
+    background: linear-gradient(135deg, #1a1a20, #0f0f14); border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    transition: transform .25s;
+  }
+  .tile:nth-child(3n) { aspect-ratio: 1 / 1.25; }
+  .tile:hover { transform: scale(1.015); }
+  .tile span.lbl { color: var(--muted); font-size: .75rem; letter-spacing: .12em; }
+  .tile img, .tile video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tile .vbadge { position: absolute; top: 10px; right: 10px; z-index: 2; width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; }
+  .tile .vbadge svg { width: 14px; height: 14px; fill: #fff; }
+  /* filtros de estilo */
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 34px; }
+  .filter-btn { background: var(--bg-card); border: 1px solid var(--line); color: var(--muted);
+    padding: 9px 18px; border-radius: 999px; font-size: .82rem; letter-spacing: .03em; cursor: pointer;
+    font-family: inherit; transition: border-color .2s, color .2s, background .2s; }
+  .filter-btn:hover { color: var(--text); border-color: var(--accent); }
+  .filter-btn.active { background: var(--text); color: #0b0b0d; border-color: var(--text); }
+  .gallery-empty { grid-column: 1 / -1; text-align: center; padding: 70px 20px; color: var(--muted);
+    border: 1px dashed var(--line); border-radius: var(--radius); }
+  .gallery-empty strong { color: var(--text); font-family: 'Cormorant Garamond', serif; font-size: 1.7rem;
+    font-weight: 500; display: block; margin-bottom: 8px; }
+  /* lightbox mídia + navegação */
+  .lb-stage { max-width: 92vw; text-align: center; }
+  .lb-media img, .lb-media video { max-width: min(92vw, 900px); max-height: 84vh; border-radius: 10px; display: block; margin: 0 auto; }
+  .lb-cap { color: var(--muted); margin-top: 14px; font-size: .9rem; }
+  .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: 0; color: #fff;
+    font-size: 3rem; line-height: 1; cursor: pointer; padding: 10px 18px; opacity: .65; transition: opacity .2s; }
+  .lb-nav:hover { opacity: 1; }
+  .lb-prev { left: 4px; } .lb-next { right: 4px; }
+  @media (max-width: 480px) { .lb-nav { font-size: 2.2rem; padding: 8px 10px; } }
+  .tile::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.08), transparent 55%);
+  }
+
+  /* Contato */
+  .contact { background: var(--bg-soft); }
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .contact-inner h2 { font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 18px; }
+  .contact-inner p { color: var(--muted); margin-bottom: 30px; }
+  .contact-list { display: flex; flex-direction: column; gap: 14px; }
+  .contact-item {
+    display: flex; align-items: center; gap: 16px; padding: 18px 22px;
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius);
+    transition: border-color .2s, transform .2s;
+  }
+  .contact-item:hover { border-color: var(--accent); transform: translateX(4px); }
+  .contact-item .ci-ico {
+    width: 42px; height: 42px; flex: 0 0 42px; border-radius: 10px;
+    background: rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; color: var(--accent);
+  }
+  .contact-item .ci-ico svg { width: 22px; height: 22px; }
+  .contact-item .ci-label { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .contact-item .ci-value { font-size: 1rem; color: var(--text); }
+  .hours { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 30px; }
+  .hours h3 { font-size: 1.5rem; margin-bottom: 18px; }
+  .hours .row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .92rem; }
+  .hours .row:last-child { border-bottom: 0; }
+  .hours .row span:last-child { color: var(--text); }
+
+  /* ---------- FOOTER ---------- */
+  footer.ft { border-top: 1px solid var(--line); padding: 44px 0; }
+  .ft-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .ft-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; }
+  .ft-brand span { color: var(--accent); }
+  .ft-social { display: flex; gap: 18px; }
+  .ft-social a { color: var(--muted); transition: color .2s; }
+  .ft-social a:hover { color: var(--accent); }
+  .ft-social svg { width: 22px; height: 22px; }
+  .ft-copy { color: var(--muted); font-size: .8rem; }
+
+  /* ---------- LIGHTBOX ---------- */
+  .lb { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.92); display: none; align-items: center; justify-content: center; padding: 30px; }
+  .lb.open { display: flex; }
+  .lb-box { max-width: 520px; text-align: center; color: var(--muted); }
+  .lb-box .ph { aspect-ratio: 1; border: 1px dashed var(--line); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .lb-close { position: absolute; top: 24px; right: 28px; background: none; border: 0; color: #fff; font-size: 2rem; cursor: pointer; line-height: 1; }
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width: 860px) {
+    .nav-links {
+      position: fixed; inset: 66px 0 auto 0; flex-direction: column; gap: 0;
+      background: var(--bg-soft); border-bottom: 1px solid var(--line);
+      padding: 10px 0; transform: translateY(-120%); transition: transform .3s; align-items: stretch;
+    }
+    .nav-links.open { transform: translateY(0); }
+    .nav-links a { padding: 14px 24px; }
+    .nav-links .nav-cta { margin: 10px 24px; text-align: center; }
+    .burger { display: block; }
+    .about, .contact-inner { grid-template-columns: 1fr; gap: 34px; }
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+    section { padding: 72px 0; }
+  }
+  @media (max-width: 480px) {
+    .gallery { grid-template-columns: 1fr; }
+    .tile:nth-child(3n) { aspect-ratio: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand">Oliver<span>.</span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#sobre">Sobre</a>
+      <a href="#estilos">Estilos</a>
+      <a href="#portfolio">Portfólio</a>
+      <a href="#contato">Contato</a>
+      <a href="#contato" class="nav-cta">Agendar</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <p class="eyebrow">Oliver · Tatuadora · Tatuí – SP</p>
+    <h1>Arte na pele,<br /><em>traço por traço.</em></h1>
+    <p class="lead">Fineline, whip shading, blackwork e arte anime. Cada tatuagem é pensada para durar e traduzir a sua ideia com delicadeza e contraste.</p>
+    <div class="hero-actions">
+      <a href="https://wa.me/message/KP43U7CJSDF3G1" target="_blank" rel="noopener" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42l-.48-.01c-.16 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>
+        Falar no WhatsApp
+      </a>
+      <a href="#portfolio" class="btn btn-ghost">Ver portfólio</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SOBRE ===================== -->
+<section id="sobre">
+  <div class="wrap about">
+    <div class="about-photo"><img src="img/oliver.jpg" alt="Oliver, tatuadora em Tatuí-SP" /></div>
+    <div class="about-text">
+      <p class="eyebrow">Sobre</p>
+      <h2>Prazer, sou a Oliver.</h2>
+      <!-- TEXTO RASCUNHO — Oliver, ajusta do teu jeito! -->
+      <p>Sou a Oliver, tatuadora em Tatuí – SP. Transformo ideias em arte na pele com um traço autoral que passeia entre a delicadeza do fineline e a força do blackwork — e amo dar vida a personagens de anime e peças cyber tribal.</p>
+      <p>Cada projeto é desenhado exclusivamente para você, num ambiente acolhedor, com material 100% descartável e todo o cuidado do primeiro contato à cicatrização. Bora criar algo que seja a sua cara?</p>
+      <div class="stats">
+        <div class="stat"><div class="num">+160</div><div class="lbl">Trabalhos publicados</div></div>
+        <div class="stat"><div class="num">4</div><div class="lbl">Estilos autorais</div></div>
+        <div class="stat"><div class="num">100%</div><div class="lbl">Material descartável</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ESTILOS ===================== -->
+<section class="styles" id="estilos">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Especialidades</p>
+      <h2>Estilos que eu tatuo</h2>
+      <p>Do traço mais delicado ao preto mais marcante — cada estilo com sua técnica e cuidado.</p>
+    </div>
+    <div class="styles-grid">
+      <div class="style-card"><div class="ico">✦</div><h3>Fineline</h3><p>Traços finos e delicados, ideais para desenhos minimalistas, escritas e detalhes.</p></div>
+      <div class="style-card"><div class="ico">◗</div><h3>Whip Shading</h3><p>Sombreados suaves feitos com movimento de chicote, criando gradientes leves e orgânicos.</p></div>
+      <div class="style-card"><div class="ico">◆</div><h3>Blackwork</h3><p>Preenchimentos sólidos em preto, contrastes marcantes e composições de forte presença.</p></div>
+      <div class="style-card"><div class="ico">✧</div><h3>Arte Anime</h3><p>Personagens e cenas do universo anime e mangá, do fineline ao preto e cinza.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PORTFÓLIO ===================== -->
+<section id="portfolio">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Trabalhos</p>
+      <h2>Portfólio</h2>
+      <p>Uma seleção de trabalhos autorais. Toque em uma imagem para ampliar.</p>
+    </div>
+    <!-- As fotos são gerenciadas pelo painel em /tatuadora/admin/ e carregadas de photos.json -->
+    <div class="filters" id="filters"></div>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<!-- ===================== CONTATO ===================== -->
+<section class="contact" id="contato">
+  <div class="wrap contact-inner">
+    <div>
+      <p class="eyebrow">Vamos criar juntos</p>
+      <h2>Bora tatuar?</h2>
+      <p>Me chama no WhatsApp com a sua ideia, referências e a região do corpo. Retorno com orçamento e disponibilidade de horário.</p>
+      <div class="contact-list">
+        <!-- WhatsApp: link de contato direto da Oliver (extraído da bio do Instagram) -->
+        <a class="contact-item" href="https://wa.me/message/KP43U7CJSDF3G1" target="_blank" rel="noopener">
+          <span class="ci-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm4.52 11.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42l-.48-.01c-.16 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg></span>
+          <span><span class="ci-label">WhatsApp</span><br /><span class="ci-value">Toque para conversar</span></span>
+        </a>
+        <!-- Instagram -->
+        <a class="contact-item" href="https://instagram.com/oliver_tattooo" target="_blank" rel="noopener">
+          <span class="ci-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>
+          <span><span class="ci-label">Instagram</span><br /><span class="ci-value">@oliver_tattooo</span></span>
+        </a>
+        <!-- Localização -->
+        <a class="contact-item" href="https://www.google.com/maps/search/?api=1&query=Tatu%C3%AD%20SP" target="_blank" rel="noopener">
+          <span class="ci-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+          <span><span class="ci-label">Estúdio</span><br /><span class="ci-value">Oliver Studio · Tatuí – SP</span></span>
+        </a>
+      </div>
+    </div>
+    <div class="hours">
+      <h3>Informações</h3>
+      <div class="row"><span>Atendimento</span><span>Com hora marcada</span></div>
+      <div class="row"><span>Agendamentos</span><span>Pelo WhatsApp</span></div>
+      <div class="row"><span>Cidade</span><span>Tatuí – SP</span></div>
+      <div class="row"><span>Estúdio</span><span>Oliver Studio</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="ft">
+  <div class="wrap ft-inner">
+    <div class="ft-brand">Oliver<span>.</span></div>
+    <div class="ft-social">
+      <a href="https://instagram.com/oliver_tattooo" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://wa.me/message/KP43U7CJSDF3G1" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Z"/></svg>
+      </a>
+    </div>
+    <div class="ft-copy">© <span id="year"></span> Oliver Tattoo. Todos os direitos reservados.</div>
+  </div>
+</footer>
+
+<!-- ===================== LIGHTBOX ===================== -->
+<div class="lb" id="lb">
+  <button class="lb-close" id="lbClose" aria-label="Fechar">×</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Próxima">›</button>
+  <div class="lb-stage">
+    <div class="lb-media" id="lbMedia"></div>
+    <div class="lb-cap" id="lbCap"></div>
+  </div>
+</div>
+
+<script>
+  // Ano automático no rodapé
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Borda da nav ao rolar
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20));
+
+  // Menu mobile
+  const burger = document.getElementById('burger');
+  const links = document.getElementById('navLinks');
+  burger.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  // ---------- Portfólio dinâmico (lê photos.json, gerado pelo painel) ----------
+  const gallery = document.getElementById('gallery');
+  const filtersEl = document.getElementById('filters');
+  const lb = document.getElementById('lb');
+  const lbMedia = document.getElementById('lbMedia');
+  const lbCap = document.getElementById('lbCap');
+  let items = [];   // todos os trabalhos
+  let shown = [];   // itens filtrados (na ordem exibida)
+  let current = 0;
+
+  const EMPTY_HTML = '<div class="gallery-empty"><strong>Portfólio em breve</strong>As fotos aparecem aqui assim que a Oliver adicioná-las pelo painel.</div>';
+  const esc = s => (s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+  function categories(list) {
+    const set = [];
+    list.forEach(i => { if (i.category && !set.includes(i.category)) set.push(i.category); });
+    return set;
+  }
+
+  function renderFilters() {
+    const cats = categories(items);
+    if (!cats.length) { filtersEl.innerHTML = ''; return; }
+    filtersEl.innerHTML = ['Todos', ...cats].map((c, idx) =>
+      `<button class="filter-btn${idx === 0 ? ' active' : ''}" data-cat="${c === 'Todos' ? '' : esc(c)}">${esc(c)}</button>`).join('');
+    filtersEl.querySelectorAll('.filter-btn').forEach(b => b.addEventListener('click', () => {
+      filtersEl.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      renderGallery(b.dataset.cat);
+    }));
+  }
+
+  function renderGallery(cat) {
+    shown = cat ? items.filter(i => i.category === cat) : items.slice();
+    if (!shown.length) { gallery.innerHTML = EMPTY_HTML; return; }
+    gallery.innerHTML = shown.map((it, idx) => {
+      if (it.type === 'video') {
+        return `<div class="tile" data-idx="${idx}"><span class="vbadge"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><video src="${esc(it.file)}" muted playsinline preload="metadata"></video></div>`;
+      }
+      return `<div class="tile" data-idx="${idx}"><img src="${esc(it.file)}" alt="${esc(it.title || 'Tatuagem')}" loading="lazy" /></div>`;
+    }).join('');
+    gallery.querySelectorAll('.tile').forEach(t => t.addEventListener('click', () => openLb(+t.dataset.idx)));
+  }
+
+  function openLb(idx) {
+    current = idx;
+    const it = shown[current];
+    if (!it) return;
+    lbMedia.innerHTML = it.type === 'video'
+      ? `<video src="${esc(it.file)}" controls autoplay playsinline></video>`
+      : `<img src="${esc(it.file)}" alt="${esc(it.title || '')}" />`;
+    lbCap.textContent = it.title || '';
+    lb.classList.add('open');
+  }
+  function closeLb() { lb.classList.remove('open'); lbMedia.innerHTML = ''; }
+  function step(d) { if (shown.length) openLb((current + d + shown.length) % shown.length); }
+
+  document.getElementById('lbClose').addEventListener('click', closeLb);
+  document.getElementById('lbPrev').addEventListener('click', e => { e.stopPropagation(); step(-1); });
+  document.getElementById('lbNext').addEventListener('click', e => { e.stopPropagation(); step(1); });
+  lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb-stage')) closeLb(); });
+  addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLb();
+    else if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
+  });
+
+  fetch('photos.json?v=' + Date.now())
+    .then(r => r.ok ? r.json() : { items: [] })
+    .then(d => { items = Array.isArray(d) ? d : (d.items || []); renderFilters(); renderGallery(''); })
+    .catch(() => { items = []; renderGallery(''); });
+</script>
+</body>
+</html>

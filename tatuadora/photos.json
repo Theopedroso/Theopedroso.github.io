@@ -1,0 +1,88 @@
+{
+  "items": [
+    {
+      "id": "seed01",
+      "file": "img/trabalho-01.jpg",
+      "type": "image",
+      "title": "Floral fineline",
+      "category": "Fineline"
+    },
+    {
+      "id": "seed02",
+      "file": "img/trabalho-02.jpg",
+      "type": "image",
+      "title": "Libélula",
+      "category": "Fineline"
+    },
+    {
+      "id": "seed03",
+      "file": "img/trabalho-03.jpg",
+      "type": "image",
+      "title": "Meditação & cosmos",
+      "category": "Fineline"
+    },
+    {
+      "id": "seed04",
+      "file": "img/trabalho-04.jpg",
+      "type": "image",
+      "title": "Serpente",
+      "category": "Blackwork"
+    },
+    {
+      "id": "seed05",
+      "file": "img/trabalho-05.jpg",
+      "type": "image",
+      "title": "Polvo",
+      "category": "Blackwork"
+    },
+    {
+      "id": "seed06",
+      "file": "img/trabalho-06.jpg",
+      "type": "image",
+      "title": "Dragão oriental",
+      "category": "Blackwork"
+    },
+    {
+      "id": "seed07",
+      "file": "img/trabalho-07.jpg",
+      "type": "image",
+      "title": "Goku",
+      "category": "Arte Anime"
+    },
+    {
+      "id": "seed08",
+      "file": "img/trabalho-08.jpg",
+      "type": "image",
+      "title": "Gojo",
+      "category": "Arte Anime"
+    },
+    {
+      "id": "seed09",
+      "file": "img/trabalho-09.jpg",
+      "type": "image",
+      "title": "Caveira realista",
+      "category": "Realismo"
+    },
+    {
+      "id": "seed10",
+      "file": "img/trabalho-10.jpg",
+      "type": "image",
+      "title": "Mago",
+      "category": "Realismo"
+    },
+    {
+      "id": "seed11",
+      "file": "img/trabalho-11.jpg",
+      "type": "image",
+      "title": "Cyber tribal",
+      "category": "Cyber Tribal"
+    },
+    {
+      "id": "seed12",
+      "file": "img/trabalho-12.jpg",
+      "type": "image",
+      "title": "Lettering",
+      "category": "Escrita"
+    }
+  ]
+}

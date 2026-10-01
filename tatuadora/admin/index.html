@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Painel · Oliver Tattoo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0b0b0d; --bg-soft:#131317; --bg-card:#17171c; --line:#26262e;
+    --text:#ececf1; --muted:#9a9aa6; --accent:#cfcfd6; --ok:#4caf7d; --err:#e06a6a;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-weight:300;line-height:1.6;padding:0 16px 80px}
+  a{color:var(--accent)}
+  .wrap{max-width:900px;margin:0 auto}
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:22px 0;border-bottom:1px solid var(--line);margin-bottom:28px;flex-wrap:wrap}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem}
+  .logo span{color:var(--accent)}
+  .logo small{display:block;font-family:'Inter';font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.7rem;margin-bottom:6px}
+  .sub{color:var(--muted);font-size:.92rem;margin-bottom:20px}
+  .card{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-bottom:20px}
+  label{display:block;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+  input,select{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:9px;padding:11px 13px;font-family:inherit;font-size:.95rem}
+  input:focus,select:focus{outline:none;border-color:var(--accent)}
+  .row2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--bg);color:var(--text);
+    padding:11px 20px;border-radius:999px;font-size:.9rem;font-family:inherit;cursor:pointer;transition:.15s;font-weight:400}
+  .btn:hover{transform:translateY(-1px);border-color:var(--accent)}
+  .btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+  .btn-primary{background:var(--text);color:#0b0b0d;border-color:var(--text);font-weight:500}
+  .btn-primary:hover{background:#fff}
+  .btn-sm{padding:7px 12px;font-size:.8rem;border-radius:8px}
+  .btn-danger:hover{border-color:var(--err);color:var(--err)}
+  .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+  .spacer{flex:1}
+  .msg{font-size:.9rem;padding:11px 14px;border-radius:9px;margin:14px 0;display:none}
+  .msg.show{display:block}
+  .msg.ok{background:rgba(76,175,125,.12);color:var(--ok);border:1px solid rgba(76,175,125,.3)}
+  .msg.err{background:rgba(224,106,106,.12);color:var(--err);border:1px solid rgba(224,106,106,.3)}
+  .msg.info{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+  .count{color:var(--muted);font-size:.85rem}
+  .unsaved{color:#e0b86a;font-size:.85rem;display:none}
+  .unsaved.show{display:inline}
+  .list{display:flex;flex-direction:column;gap:12px}
+  .item{display:grid;grid-template-columns:84px 1fr auto;gap:14px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:12px}
+  .item .thumb{width:84px;height:84px;border-radius:9px;object-fit:cover;background:#000;border:1px solid var(--line)}
+  .item .fields{min-width:0}
+  .item .fields input{margin:0 0 8px}
+  .item .fields .mini{font-size:.72rem;color:var(--muted);letter-spacing:.08em}
+  .item .ctrls{display:flex;flex-direction:column;gap:6px}
+  .empty{text-align:center;color:var(--muted);padding:40px 20px;border:1px dashed var(--line);border-radius:var(--radius)}
+  .hide{display:none}
+  details{margin-top:10px}
+  summary{cursor:pointer;color:var(--accent);font-size:.9rem}
+  ol{margin:12px 0 0 20px;color:var(--muted);font-size:.9rem}
+  ol li{margin-bottom:7px}
+  code{background:var(--bg);border:1px solid var(--line);padding:1px 6px;border-radius:5px;font-size:.85em}
+  .spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  @media(max-width:560px){.row2{grid-template-columns:1fr}.item{grid-template-columns:64px 1fr}.item .thumb{width:64px;height:64px}.item .ctrls{grid-column:1 / -1;flex-direction:row;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo">Oliver<span>.</span><small>Painel do portfólio</small></div>
+    <div id="whoami" class="count"></div>
+  </header>
+
+  <!-- ===== LOGIN ===== -->
+  <section id="loginView">
+    <h2>Entrar</h2>
+    <p class="sub">Conecte-se uma vez para gerenciar as fotos do seu site. Sua chave fica salva só neste aparelho.</p>
+    <div class="card">
+      <div class="row2">
+        <div><label>Usuário/Dono</label><input id="owner" value="Theopedroso" /></div>
+        <div><label>Repositório</label><input id="repo" value="Theopedroso.github.io" /></div>
+        <div><label>Branch</label><input id="branch" value="main" /></div>
+      </div>
+      <label>Chave de acesso (GitHub token)</label>
+      <input id="token" type="password" placeholder="ghp_... ou github_pat_..." autocomplete="off" />
+      <div style="margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-primary" id="connectBtn">Conectar</button>
+        <label style="margin:0;text-transform:none;letter-spacing:0;color:var(--muted);font-size:.85rem;display:flex;align-items:center;gap:7px">
+          <input type="checkbox" id="remember" checked style="width:auto" /> Lembrar neste aparelho
+        </label>
+      </div>
+      <div class="msg" id="loginMsg"></div>
+      <details>
+        <summary>Como criar a chave de acesso (1ª vez)</summary>
+        <ol>
+          <li>Abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> (logada na conta dona do site).</li>
+          <li>Em <strong>Token name</strong>, escreva algo como <code>painel-oliver</code>. Em <strong>Expiration</strong>, escolha o prazo (ex.: 1 ano).</li>
+          <li>Em <strong>Repository access</strong> → <strong>Only select repositories</strong> → escolha <code>Theopedroso.github.io</code>.</li>
+          <li>Em <strong>Permissions</strong> → <strong>Repository permissions</strong> → <strong>Contents</strong> → selecione <strong>Read and write</strong>.</li>
+          <li>Clique em <strong>Generate token</strong>, copie o código e cole aqui em cima. Pronto! 🎉</li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===== PAINEL ===== -->
+  <section id="appView" class="hide">
+    <h2>Portfólio</h2>
+    <p class="sub">Adicione, legende, reordene e remova seus trabalhos. Depois clique em <strong>Salvar portfólio</strong> para publicar no site.</p>
+
+    <div class="card">
+      <div class="toolbar">
+        <input id="fileInput" type="file" accept="image/*,video/*" multiple class="hide" />
+        <button class="btn" id="addBtn">+ Adicionar fotos/vídeos</button>
+        <select id="newCat" style="width:auto;min-width:160px">
+          <option value="">Sem categoria</option>
+          <option>Fineline</option><option>Whip Shading</option><option>Blackwork</option>
+          <option>Arte Anime</option><option>Cyber Tribal</option><option>Floral</option>
+          <option>Escrita</option><option>Realismo</option><option>Autoral</option>
+        </select>
+        <span class="spacer"></span>
+        <span class="unsaved" id="unsaved">● alterações não salvas</span>
+        <button class="btn btn-primary" id="saveBtn" disabled>Salvar portfólio</button>
+      </div>
+      <div class="count"><span id="count">0</span> itens no portfólio</div>
+      <div class="msg" id="appMsg"></div>
+      <div class="list" id="list"></div>
+    </div>
+
+    <div class="toolbar">
+      <a class="btn btn-sm" href="../" target="_blank" rel="noopener">Ver o site ↗</a>
+      <span class="spacer"></span>
+      <button class="btn btn-sm btn-danger" id="logoutBtn">Sair</button>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let token='', owner='', repo='', branch='';
+let items=[], photosSha=null, dirty=false;
+
+// ---------- helpers ----------
+function show(el, text, kind){ el.className='msg show '+(kind||'info'); el.innerHTML=text; }
+function hide(el){ el.className='msg'; }
+function rawBase(){ return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/tatuadora/`; }
+function setDirty(v){ dirty=v; $('unsaved').classList.toggle('show',v); $('saveBtn').disabled=!v; }
+
+function bufToBase64(buf){
+  const bytes=new Uint8Array(buf); let bin=''; const chunk=0x8000;
+  for(let i=0;i<bytes.length;i+=chunk){ bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk)); }
+  return btoa(bin);
+}
+const utf8b64 = s => btoa(unescape(encodeURIComponent(s)));
+const b64utf8 = s => decodeURIComponent(escape(atob(s.replace(/\n/g,''))));
+
+async function gh(path, opts={}){
+  const res = await fetch('https://api.github.com'+path, {
+    ...opts,
+    headers:{ 'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json',
+      'X-GitHub-Api-Version':'2022-11-28', ...(opts.headers||{}) }
+  });
+  if(!res.ok){
+    let m = res.status+' '+res.statusText;
+    try{ const j=await res.json(); if(j.message) m=j.message; }catch(e){}
+    if(res.status===401) m='Chave inválida ou expirada. Gere uma nova.';
+    if(res.status===404) m='Não encontrei o repositório/branch. Confira os campos.';
+    throw new Error(m);
+  }
+  return res.status===204 ? null : res.json();
+}
+
+// ---------- login ----------
+async function connect(){
+  owner=$('owner').value.trim(); repo=$('repo').value.trim(); branch=$('branch').value.trim()||'main';
+  token=$('token').value.trim();
+  if(!token){ show($('loginMsg'),'Cole a chave de acesso.','err'); return; }
+  show($('loginMsg'),'<span class="spin"></span> Conectando…','info');
+  try{
+    const me = await gh('/user');
+    await loadPhotos();
+    if($('remember').checked){
+      localStorage.setItem('oliver_cms', JSON.stringify({token,owner,repo,branch}));
+    }
+    $('whoami').textContent='Conectada como @'+me.login;
+    $('loginView').classList.add('hide');
+    $('appView').classList.remove('hide');
+    render();
+  }catch(e){ show($('loginMsg'), e.message, 'err'); }
+}
+
+async function loadPhotos(){
+  try{
+    const d = await gh(`/repos/${owner}/${repo}/contents/tatuadora/photos.json?ref=${branch}&t=${Date.now()}`);
+    photosSha = d.sha;
+    const json = JSON.parse(b64utf8(d.content));
+    items = Array.isArray(json) ? json : (json.items||[]);
+  }catch(e){
+    if(String(e.message).includes('não encontrei')||String(e.message).includes('Not Found')||String(e.message).includes('404')){
+      items=[]; photosSha=null;
+    } else { throw e; }
+  }
+}
+
+// ---------- render ----------
+function render(){
+  $('count').textContent=items.length;
+  const list=$('list');
+  if(!items.length){ list.innerHTML='<div class="empty">Nenhuma foto ainda. Clique em “+ Adicionar fotos/vídeos”.</div>'; return; }
+  list.innerHTML='';
+  items.forEach((it,i)=>{
+    const el=document.createElement('div'); el.className='item';
+    const media = it.type==='video'
+      ? `<video class="thumb" src="${rawBase()+it.file}" muted></video>`
+      : `<img class="thumb" src="${rawBase()+it.file}" alt="" />`;
+    el.innerHTML = `
+      ${media}
+      <div class="fields">
+        <input data-i="${i}" data-f="title" placeholder="Legenda (ex.: Medusa fineline)" value="${(it.title||'').replace(/"/g,'&quot;')}" />
+        <input data-i="${i}" data-f="category" list="catlist" placeholder="Categoria (ex.: Fineline)" value="${(it.category||'').replace(/"/g,'&quot;')}" />
+        <div class="mini">${it.type==='video'?'🎞️ vídeo':'🖼️ foto'} · ${it.file}</div>
+      </div>
+      <div class="ctrls">
+        <button class="btn btn-sm" data-up="${i}" ${i===0?'disabled':''}>↑</button>
+        <button class="btn btn-sm" data-down="${i}" ${i===items.length-1?'disabled':''}>↓</button>
+        <button class="btn btn-sm btn-danger" data-del="${i}">Remover</button>
+      </div>`;
+    list.appendChild(el);
+  });
+  list.querySelectorAll('input[data-f]').forEach(inp=>inp.addEventListener('input',e=>{
+    items[+e.target.dataset.i][e.target.dataset.f]=e.target.value; setDirty(true);
+  }));
+  list.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>move(+b.dataset.up,-1));
+  list.querySelectorAll('[data-down]').forEach(b=>b.onclick=()=>move(+b.dataset.down,1));
+  list.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    if(confirm('Remover este item do portfólio?')){ items.splice(+b.dataset.del,1); setDirty(true); render(); }
+  });
+}
+function move(i,d){ const j=i+d; if(j<0||j>=items.length) return; [items[i],items[j]]=[items[j],items[i]]; setDirty(true); render(); }
+
+// ---------- adicionar ----------
+async function addFiles(files){
+  if(!files.length) return;
+  const cat=$('newCat').value;
+  $('addBtn').disabled=true;
+  let done=0;
+  for(const file of files){
+    show($('appMsg'),`<span class="spin"></span> Enviando ${++done}/${files.length}: ${file.name}…`,'info');
+    try{
+      const buf=await file.arrayBuffer();
+      const safe=file.name.toLowerCase().replace(/[^a-z0-9.]+/g,'-').replace(/^-+|-+$/g,'');
+      const rel=`img/${Date.now()}-${safe}`;
+      await gh(`/repos/${owner}/${repo}/contents/tatuadora/${rel}`,{
+        method:'PUT',
+        body:JSON.stringify({message:`Upload ${safe}`, content:bufToBase64(buf), branch})
+      });
+      items.push({ id:'p'+Date.now()+Math.floor(Math.random()*1000),
+        file:rel, type:file.type.startsWith('video')?'video':'image', title:'', category:cat });
+      setDirty(true);
+    }catch(e){ show($('appMsg'),'Erro ao enviar '+file.name+': '+e.message,'err'); $('addBtn').disabled=false; return; }
+  }
+  $('addBtn').disabled=false;
+  show($('appMsg'),`${files.length} arquivo(s) adicionado(s). Ajuste as legendas e clique em <strong>Salvar portfólio</strong>.`,'ok');
+  render();
+}
+
+// ---------- salvar ----------
+async function save(){
+  $('saveBtn').disabled=true;
+  show($('appMsg'),'<span class="spin"></span> Salvando…','info');
+  try{
+    const body=JSON.stringify({items},null,2)+'\n';
+    const payload={ message:'Atualiza portfólio (photos.json)', content:utf8b64(body), branch };
+    if(photosSha) payload.sha=photosSha;
+    const res=await gh(`/repos/${owner}/${repo}/contents/tatuadora/photos.json`,{method:'PUT',body:JSON.stringify(payload)});
+    photosSha=res.content.sha;
+    setDirty(false);
+    show($('appMsg'),'✓ Portfólio publicado! Pode levar 1–2 minutos para aparecer no site.','ok');
+  }catch(e){
+    show($('appMsg'),'Erro ao salvar: '+e.message+' — recarregue e tente de novo.','err');
+    $('saveBtn').disabled=false;
+  }
+}
+
+// ---------- eventos ----------
+$('connectBtn').onclick=connect;
+$('token').addEventListener('keydown',e=>{ if(e.key==='Enter') connect(); });
+$('addBtn').onclick=()=>$('fileInput').click();
+$('fileInput').onchange=e=>{ addFiles([...e.target.files]); e.target.value=''; };
+$('saveBtn').onclick=save;
+$('logoutBtn').onclick=()=>{ if(dirty && !confirm('Há alterações não salvas. Sair mesmo assim?')) return;
+  localStorage.removeItem('oliver_cms'); location.reload(); };
+addEventListener('beforeunload',e=>{ if(dirty){ e.preventDefault(); e.returnValue=''; } });
+
+// datalist de categorias
+const dl=document.createElement('datalist'); dl.id='catlist';
+dl.innerHTML=['Fineline','Whip Shading','Blackwork','Arte Anime','Cyber Tribal','Floral','Escrita','Realismo','Autoral']
+  .map(c=>`<option value="${c}">`).join('');
+document.body.appendChild(dl);
+
+// auto-login se já salvo
+(function(){
+  try{
+    const s=JSON.parse(localStorage.getItem('oliver_cms')||'null');
+    if(s&&s.token){ $('owner').value=s.owner; $('repo').value=s.repo; $('branch').value=s.branch; $('token').value=s.token; connect(); }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
